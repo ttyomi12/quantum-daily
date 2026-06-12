@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量子科技产业日报 | {{REPORT_DATE}} | 科大国盾量子</title>
+<style>
+:root {
+  --bg: #0a0e17; --surface: #111827; --card: #161c2a; --card-hover: #1c2436;
+  --border: #1e2a3a; --border-light: #263040;
+  --text: #e2e8f0; --t2: #8892a8; --t3: #5a6478;
+  --cyan: #00d4ff; --cyan-glow: rgba(0,212,255,.25);
+  --green: #00e676; --green-glow: rgba(0,230,118,.25);
+  --orange: #ff9100; --orange-glow: rgba(255,145,0,.25);
+  --red: #ff3d5a; --red-glow: rgba(255,61,90,.3);
+  --purple: #a855f7; --purple-glow: rgba(168,85,247,.25);
+  --blue: #3b82f6;
+  --r: 14px; --r-sm: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg); color: var(--text); min-height:100vh; line-height:1.5;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,212,255,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 90% 80%, rgba(168,85,247,.04), transparent),
+    radial-gradient(ellipse 50% 50% at 10% 50%, rgba(0,230,118,.03), transparent);
+}
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border-light); border-radius:10px; }
+::-webkit-scrollbar-thumb:hover { background:var(--t3); }
+
+/* Header */
+.hd {
+  background: rgba(17,24,39,.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); padding:0 28px; height:62px; display:flex;
+  align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99;
+}
+.hd-l { display:flex; align-items:center; gap:16px; }
+.hd-logo { display:flex; align-items:center; gap:10px; }
+.hd-logo .icon { width:32px; height:32px; border-radius:var(--r-sm); background:linear-gradient(135deg, var(--cyan), var(--purple)); display:flex; align-items:center; justify-content:center; font-size:16px; }
+.hd-logo h1 { font-size:16px; font-weight:700; letter-spacing:-.3px; background:linear-gradient(135deg,#e2e8f0,#a0b4d0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hd-date { font-size:12px; color:var(--t2); }
+
+.ct { max-width:1440px; margin:0 auto; padding:20px 24px; }
+
+/* Region toggle pills */
+.region-pills { display:flex; gap:2px; background:var(--surface); border-radius:10px; padding:3px; border:1px solid var(--border); }
+.region-pill { padding:7px 16px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .2s; border:none; background:transparent; color:var(--t2); }
+.region-pill.active { background:var(--blue); color:#fff; box-shadow:0 2px 8px rgba(59,130,246,.3); }
+.region-pill:hover:not(.active) { color:var(--text); }
+
+/* Stat cards */
+.sr { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:20px; }
+.sc {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:16px 18px; position:relative; overflow:hidden; transition:all .25s;
+}
+.sc:hover { border-color:var(--border-light); transform:translateY(-1px); box-shadow:0 4px 20px rgba(0,0,0,.3); }
+.sc::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.sc:nth-child(1)::after { background:var(--cyan); }
+.sc:nth-child(2)::after { background:var(--blue); }
+.sc:nth-child(3)::after { background:var(--purple); }
+.sc:nth-child(4)::after { background:var(--red); }
+.sc:nth-child(5)::after { background:var(--orange); }
+.sc:nth-child(6)::after { background:var(--green); }
+.sc .l { font-size:11px; color:var(--t3); text-transform:uppercase; letter-spacing:.8px; font-weight:500; }
+.sc .v { font-size:26px; font-weight:800; margin-top:4px; letter-spacing:-1px; }
+.sc .v.sm { font-size:14px; font-weight:600; letter-spacing:0; margin-top:6px; }
+
+/* Content layout */
+.mg { display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:16px; }
+.cd {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  overflow:hidden; transition:border-color .2s;
+}
+.cd:hover { border-color:var(--border-light); }
+.cd-h {
+  padding:14px 20px; border-bottom:1px solid var(--border); font-weight:600; font-size:14px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(255,255,255,.01);
+}
+.cd-b { padding:0; max-height:800px; overflow-y:auto; }
+
+/* ===== NEWS ITEM — 完全参照舆情监控 .ri 格式 ===== */
+.ri {
+  padding:14px 20px; border-bottom:1px solid var(--border); cursor:default;
+  transition:all .2s; border-left:3px solid transparent; position:relative;
+}
+.ri:hover { background:var(--card-hover); }
+.ri.breakthrough { border-left-color:var(--red); background:rgba(255,61,90,.03); }
+.ri.t0-item { border-left-color:var(--orange); background:rgba(255,145,0,.04); }
+.ri:last-child { border-bottom:none; }
+.ri .rt { font-weight:600; font-size:13px; line-height:1.5; display:flex; align-items:flex-start; gap:8px; }
+.ri .rt a { color:var(--text); text-decoration:none; transition:color .15s; }
+.ri .rt a:hover { color:var(--cyan); }
+.ri .rt .ext-link { font-size:14px; opacity:.5; transition:opacity .15s; flex-shrink:0; }
+.ri:hover .rt .ext-link { opacity:1; }
+.ri .rm { font-size:11px; color:var(--t3); margin-top:5px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.ri .rs { font-size:12px; color:var(--t2); margin-top:6px; line-height:1.6; max-height:38px; overflow:hidden; transition:max-height .3s; }
+.ri.expanded .rs { max-height:500px; }
+.ri .tags { margin-top:8px; display:flex; gap:5px; flex-wrap:wrap; }
+.ri .row-link { position:absolute; top:14px; right:14px; }
+
+/* Tag system */
+.tag { font-size:10px; padding:3px 9px; border-radius:12px; font-weight:600; letter-spacing:.3px; }
+.tag-verified { background:rgba(0,230,118,.12); color:var(--green); }
+.tag-policy { background:rgba(59,130,246,.15); color:var(--blue); }
+.tag-industry { background:rgba(168,85,247,.15); color:var(--purple); }
+.tag-research { background:rgba(0,212,255,.12); color:var(--cyan); }
+.tag-competitor { background:rgba(255,145,0,.12); color:var(--orange); }
+.tag-breakthrough { background:rgba(255,61,90,.15); color:var(--red); }
+.tag-cn { background:rgba(255,255,255,.06); color:var(--t2); }
+
+.detail-btn { font-size:11px; color:var(--cyan); cursor:pointer; font-weight:500; transition:color .15s; }
+.detail-btn:hover { color:#fff; }
+.detail-panel { margin-top:10px; padding:12px 14px; background:rgba(0,0,0,.2); border-radius:8px; font-size:12px; line-height:1.7; display:none; }
+.detail-panel b { color:var(--t2); }
+.detail-panel a { color:var(--cyan); word-break:break-all; }
+
+/* Source badges */
+.src-badges { display:flex; gap:6px; align-items:center; }
+.src-badge { font-size:10px; padding:2px 8px; border-radius:10px; font-weight:500; background:rgba(255,255,255,.05); color:var(--t3); }
+.src-badge.gov { background:rgba(0,212,255,.08); color:var(--cyan); }
+.src-badge.journal { background:rgba(255,145,0,.08); color:var(--orange); }
+.src-badge.official { background:rgba(0,230,118,.08); color:var(--green); }
+.src-badge.media { background:rgba(168,85,247,.08); color:var(--purple); }
+
+/* Section tabs */
+.tabs { display:flex; gap:4px; margin-bottom:16px; flex-wrap:wrap; }
+.tab-btn { padding:8px 20px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--t2); cursor:pointer; font-size:12px; font-weight:600; transition:all .2s; }
+.tab-btn:hover { color:var(--text); border-color:var(--border-light); }
+.tab-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 2px 12px rgba(59,130,246,.3); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* Footer */
+.ft { border-top:1px solid var(--border); margin-top:24px; padding:18px 24px; text-align:center; }
+.ft p { font-size:12px; color:var(--t3); line-height:1.8; }
+
+.empty-state { text-align:center; padding:50px 20px; }
+.empty-state p { color:var(--t2); font-size:13px; }
+
+@media (max-width:1200px){ .sr { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:768px) { .sr { grid-template-columns:repeat(2,1fr); } .hd { padding:0 14px; height:auto; padding-top:10px; padding-bottom:10px; } .ct { padding:12px 10px; } .ri { padding:12px 14px; } }
+@media (max-width:480px) { .sr { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <div class="hd-l">
+    <div class="hd-logo">
+      <div class="icon">📡</div>
+      <h1>量子科技产业日报</h1>
+    </div>
+    <div class="region-pills">
+      <button class="region-pill active" data-region="cn" onclick="switchRegion('cn')">🇨🇳 国内</button>
+      <button class="region-pill" data-region="global" onclick="switchRegion('global')">🌍 国外</button>
+    </div>
+  </div>
+  <div class="hd-actions">
+    <span class="hd-date">📅 {{REPORT_DATE}} | 科大国盾量子 · QuantumCTek</span>
+  </div>
+</header>
+
+<div class="ct">
+  <!-- Stats -->
+  <div class="sr">
+    <div class="sc"><span class="l">总快讯</span><span class="v" style="color:var(--cyan)">{{TOTAL_COUNT}}</span></div>
+    <div class="sc"><span class="l">📋 政策动态</span><span class="v" style="color:var(--blue)">{{POLICY_COUNT}}</span></div>
+    <div class="sc"><span class="l">🏭 产业动态</span><span class="v" style="color:var(--purple)">{{INDUSTRY_COUNT}}</span></div>
+    <div class="sc"><span class="l">🔬 科研进展</span><span class="v" style="color:var(--red)">{{RESEARCH_COUNT}}</span></div>
+    <div class="sc"><span class="l">🎯 T0友商</span><span class="v" style="color:var(--orange)">{{T0_COUNT}}</span></div>
+    <div class="sc"><span class="l">⚡ 重大突破</span><span class="v" style="color:var(--green)">{{BREAKTHROUGH_COUNT}}</span></div>
+  </div>
+
+  <!-- Tab switcher -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('all')">📋 全部 ({{TOTAL_COUNT}})</button>
+    <button class="tab-btn" onclick="switchTab('policy')">📋 政策 ({{POLICY_COUNT}})</button>
+    <button class="tab-btn" onclick="switchTab('industry')">🏭 产业 ({{INDUSTRY_COUNT}})</button>
+    <button class="tab-btn" onclick="switchTab('research')">🔬 科研 ({{RESEARCH_COUNT}})</button>
+    <button class="tab-btn" onclick="switchTab('competitor')">🎯 T0友商 ({{T0_COUNT}})</button>
+  </div>
+
+  <!-- All items -->
+  <div id="tab-all" class="tab-panel active">
+    <div class="mg">
+      <div class="cd">
+        <div class="cd-h">
+          <span>📰 今日量子科技快讯</span>
+          <span style="font-weight:400;font-size:12px;color:var(--green)">✅ 全部已核验 · {{GENERATION_TIME}} 更新</span>
+        </div>
+        <div class="cd-b">
+          {{ALL_ITEMS}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Policy -->
+  <div id="tab-policy" class="tab-panel">
+    <div class="mg">
+      <div class="cd">
+        <div class="cd-h"><span>📋 政策动态</span><span style="font-weight:400;font-size:12px;color:var(--green)">✅ 全部已核验</span></div>
+        <div class="cd-b">{{POLICY_ITEMS}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industry -->
+  <div id="tab-industry" class="tab-panel">
+    <div class="mg">
+      <div class="cd">
+        <div class="cd-h"><span>🏭 产业动态</span><span style="font-weight:400;font-size:12px;color:var(--green)">✅ 全部已核验</span></div>
+        <div class="cd-b">{{INDUSTRY_ITEMS}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Research -->
+  <div id="tab-research" class="tab-panel">
+    <div class="mg">
+      <div class="cd">
+        <div class="cd-h"><span>🔬 科研进展</span><span style="font-weight:400;font-size:12px;color:var(--green)">✅ 全部已核验</span></div>
+        <div class="cd-b">{{RESEARCH_ITEMS}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Competitor -->
+  <div id="tab-competitor" class="tab-panel">
+    <div class="mg">
+      <div class="cd">
+        <div class="cd-h"><span>🎯 T0 友商动态追踪</span><span style="font-weight:400;font-size:12px;color:var(--green)">✅ 全部已核验</span></div>
+        <div class="cd-b" style="padding:16px 20px;">
+          {{COMPETITOR_TRACKER}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.ct -->
+
+<footer class="ft">
+  <p>© {{YEAR}} 科大国盾量子技术股份有限公司 · 量子科技产业日报 · 自动生成 · {{REPORT_DATE}} · 信源: {{SOURCE_STATS}} · 仅供参考</p>
+</footer>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  var panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+}
+function switchRegion(region) {
+  document.querySelectorAll('.region-pill').forEach(p => p.classList.remove('active'));
+  var pills = document.querySelectorAll('.region-pill');
+  pills.forEach(function(p) {
+    if (p.getAttribute('data-region') === region) p.classList.add('active');
+  });
+  // 隐藏/显示对应区域新闻
+  document.querySelectorAll('.ri[data-region]').forEach(function(ri) {
+    if (region === 'cn') {
+      ri.style.display = ri.getAttribute('data-region') === 'cn' ? '' : 'none';
+    } else {
+      ri.style.display = '';
+    }
+  });
+}
+function toggleDetail(id) {
+  var panel = document.getElementById('detail-' + id);
+  var item = document.getElementById('item-' + id);
+  if (panel.style.display === 'block') {
+    panel.style.display = 'none';
+    item.classList.remove('expanded');
+  } else {
+    panel.style.display = 'block';
+    item.classList.add('expanded');
+  }
+}
+function toggleAll() {
+  var panels = document.querySelectorAll('.detail-panel');
+  var anyOpen = false;
+  panels.forEach(function(p) { if (p.style.display === 'block') anyOpen = true; });
+  panels.forEach(function(p) { p.style.display = anyOpen ? 'none' : 'block'; });
+  document.querySelectorAll('.ri').forEach(function(r) {
+    if (anyOpen) r.classList.remove('expanded'); else r.classList.add('expanded');
+  });
+}
+</script>
+</body>
+</html>
