@@ -1,0 +1,66 @@
+name: 量子日报自动生成
+
+on:
+  schedule:
+    # 每天北京时间 9:00 (UTC+8 = 01:00 UTC)
+    - cron: '0 1 * * *'
+  # 允许手动触发（用于测试）
+  workflow_dispatch:
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 生成日报
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/anthropic' }}
+          DEEPSEEK_MODEL: ${{ secrets.DEEPSEEK_MODEL || 'DeepSeek-V4-pro' }}
+        run: node scripts/generate.js
+
+      - name: 提交日报到 GitHub
+        run: |
+          git config user.name "量子日报机器人"
+          git config user.email "bot@quantumctek.com"
+          git add output/
+          if git diff --cached --quiet; then
+            echo "无变更，跳过提交"
+          else
+            TODAY=$(date +%Y-%m-%d)
+            TOTAL=$(cat output/summary.json 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('total','?'))" 2>/dev/null || echo "?")
+            git commit -m "📰 量子日报 ${TODAY} · ${TOTAL}条快讯"
+            git push
+          fi
+
+      - name: 推送到 Gitee
+        run: |
+          # 通过 HTTPS + Token 推送到 Gitee
+          git remote add gitee https://TRamses:${{ secrets.GITEE_TOKEN }}@gitee.com/TRamses/quantum-daily.git 2>/dev/null || true
+          git push gitee main --force
+          echo "✅ 已推送到 Gitee"
+
+      - name: 触发 Gitee Pages 更新
+        run: |
+          # 调用 Gitee OpenAPI 触发 Pages 重新部署
+          RESPONSE=$(curl -s -X POST \
+            "https://gitee.com/api/v5/repos/TRamses/quantum-daily/pages/builds" \
+            -H "Content-Type: application/json" \
+            -d "{\"access_token\":\"${{ secrets.GITEE_TOKEN }}\"}")
+          echo "Gitee Pages API 响应: $RESPONSE"
+          if echo "$RESPONSE" | grep -q '"status":"ok"\|"message":"Request successfully"'; then
+            echo "✅ Gitee Pages 更新已触发"
+          else
+            echo "⚠ Gitee Pages API 返回非预期响应，请检查 Token 权限"
+            # 即使 API 失败也不中断流水线，日报文件已经推送成功
+          fi
+          echo "🌐 日报地址: https://TRamses.gitee.io/quantum-daily/"

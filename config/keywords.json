@@ -1,0 +1,91 @@
+{
+  "tech_routes": {
+    "label": "技术路线",
+    "keywords": [
+      "超导量子计算", "superconducting qubit", "transmon",
+      "光量子", "photonic quantum", "quantum photonics",
+      "离子阱", "trapped ion", "ion trap",
+      "硅基量子点", "silicon quantum dot", "spin qubit",
+      "中性原子", "neutral atom", "cold atom",
+      "拓扑量子计算", "topological qubit", "majorana",
+      "量子密钥分发", "QKD", "quantum key distribution",
+      "后量子密码", "PQC", "post-quantum cryptography",
+      "量子传感", "quantum sensing", "quantum sensor",
+      "量子精密测量", "quantum metrology", "precision measurement",
+      "量子纠错", "quantum error correction", "logical qubit",
+      "容错量子计算", "fault-tolerant quantum", "FTQC"
+    ]
+  },
+  "business": {
+    "label": "商业动态",
+    "keywords": [
+      "融资", "funding", "investment", "series", "raise",
+      "IPO", "上市", "public offering",
+      "商业订单", "contract", "purchase order", "deal",
+      "战略合作", "partnership", "collaboration", "strategic alliance",
+      "合资", "joint venture", "JV",
+      "产品发布", "product launch", "release", "announced",
+      "专利申请", "patent", "filing",
+      "客户案例", "customer", "client", "deployment",
+      "营收", "revenue", "earnings", "financial results",
+      "财报", "quarterly report", "annual report"
+    ]
+  },
+  "policy": {
+    "label": "政策战略",
+    "keywords": [
+      "国家量子计划", "national quantum initiative", "quantum strategy",
+      "产业园区", "quantum park", "quantum cluster",
+      "政府采购", "government procurement", "public tender",
+      "招标", "bid", "RFP",
+      "标准制定", "standard", "standardization",
+      "白皮书", "white paper",
+      "出口管制", "export control", "technology restriction",
+      "供应链安全", "supply chain security"
+    ]
+  },
+  "regions": {
+    "label": "区域市场",
+    "keywords": [
+      "中国", "China", "北京", "Beijing", "上海", "Shanghai", "安徽", "Anhui", "广东", "Guangdong",
+      "美国", "United States", "US", "伊利诺伊", "Illinois", "Chicago",
+      "欧洲", "Europe", "EU", "德国", "Germany", "法国", "France", "芬兰", "Finland",
+      "英国", "UK", "United Kingdom", "加拿大", "Canada",
+      "日本", "Japan", "新加坡", "Singapore", "韩国", "Korea"
+    ]
+  },
+  "applications": {
+    "label": "应用领域",
+    "keywords": [
+      "金融", "finance", "banking",
+      "制药", "pharma", "drug discovery", "药物研发",
+      "材料科学", "material science", "materials",
+      "电池", "battery", "energy storage",
+      "物流", "logistics", "supply chain", "路径优化", "route optimization",
+      "AI", "机器学习", "machine learning", "artificial intelligence",
+      "网络安全", "cybersecurity", "encryption", "加密",
+      "航空航天", "aerospace", "aviation",
+      "国防", "defense", "military",
+      "能源", "energy", "grid optimization", "电网优化"
+    ]
+  },
+  "search_queries": {
+    "label": "每日标准搜索查询（12组）",
+    "queries": [
+      { "category": "政策", "query": "quantum computing government policy funding initiative 2026", "lang": "en" },
+      { "category": "政策", "query": "quantum export control regulation restriction semiconductor", "lang": "en" },
+      { "category": "政策", "query": "QKD quantum network national standard infrastructure deployment", "lang": "en" },
+      { "category": "政策", "query": "post-quantum cryptography NIST standard migration adoption deadline", "lang": "en" },
+      { "category": "产业", "query": "IonQ OR Rigetti OR D-Wave OR Quantinuum OR IQM quantum computing business results partnership", "lang": "en" },
+      { "category": "产业", "query": "quantum computing funding investment IPO merger acquisition 2026", "lang": "en" },
+      { "category": "产业", "query": "quantum computing commercial contract customer deployment use case", "lang": "en" },
+      { "category": "产业", "query": "本源量子 OR 国仪量子 OR 玻色量子 OR 九州量子 OR 图灵量子 融资 OR 合作 OR 产品", "lang": "zh" },
+      { "category": "科研", "query": "quantum supremacy breakthrough logical qubit error correction milestone 2026", "lang": "en" },
+      { "category": "科研", "query": "quantum key distribution QKD satellite network field trial experiment", "lang": "en" },
+      { "category": "科研", "query": "quantum sensing gravimeter radar magnetometer precision measurement breakthrough", "lang": "en" },
+      { "category": "科研", "query": "quantum supercomputing hybrid classical-quantum supercomputing fusion integration", "lang": "en" },
+      { "category": "政策", "query": "量子 政策 产业 规划 产业园 招标 2026", "lang": "zh" },
+      { "category": "科研", "query": "量子计算 量子通信 量子测量 突破 进展 2026", "lang": "zh" }
+    ]
+  }
+}

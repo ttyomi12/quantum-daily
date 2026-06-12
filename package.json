@@ -1,0 +1,13 @@
+{
+  "name": "quantum-daily-report",
+  "version": "1.0.0",
+  "description": "量子科技产业日报 - 全自动生成系统 · 科大国盾量子",
+  "main": "scripts/generate.js",
+  "scripts": {
+    "generate": "node scripts/generate.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}

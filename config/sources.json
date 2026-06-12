@@ -1,0 +1,55 @@
+{
+  "industry_media": {
+    "label": "行业媒体",
+    "sources": [
+      { "url": "https://thequantuminsider.com/", "name": "The Quantum Insider", "lang": "en", "level": "A" },
+      { "url": "https://thequantumdaily.com", "name": "The Quantum Daily", "lang": "en", "level": "A" },
+      { "url": "https://quantumcomputingreport.com/", "name": "Quantum Computing Report", "lang": "en", "level": "A" },
+      { "url": "https://www.insidequantumtechnology.com", "name": "Inside Quantum Technology", "lang": "en", "level": "A" },
+      { "url": "http://www.qtc.com.cn/", "name": "量子科技产业资讯", "lang": "zh", "level": "A" },
+      { "url": "https://www.c114.com.cn/quantum/", "name": "C114量子通信网", "lang": "zh", "level": "A" }
+    ]
+  },
+  "government": {
+    "label": "政府机构",
+    "sources": [
+      { "url": "https://www.quantum.gov/", "name": "美国量子协调办公室", "lang": "en", "level": "A" },
+      { "url": "https://www.whitehouse.gov/", "name": "美国白宫", "lang": "en", "level": "A" },
+      { "url": "https://www.energy.gov/newsroom", "name": "美国能源部", "lang": "en", "level": "A" },
+      { "url": "https://openqkd.eu/", "name": "欧洲 OpenQKD", "lang": "en", "level": "A" },
+      { "url": "https://digital-strategy.ec.europa.eu/en/news", "name": "欧盟数字战略", "lang": "en", "level": "A" },
+      { "url": "https://commission.europa.eu/index_en", "name": "欧盟委员会", "lang": "en", "level": "A" },
+      { "url": "https://www.ukri.org/", "name": "英国研究与创新署", "lang": "en", "level": "A" }
+    ]
+  },
+  "journals": {
+    "label": "权威期刊",
+    "sources": [
+      { "url": "https://www.nature.com/", "name": "Nature", "lang": "en", "level": "A" },
+      { "url": "https://www.science.org/", "name": "Science", "lang": "en", "level": "A" },
+      { "url": "https://journals.aps.org/prl/", "name": "Physical Review Letters", "lang": "en", "level": "A" }
+    ]
+  },
+  "competitor_official": {
+    "label": "友商官方新闻",
+    "sources": [
+      { "url": "https://www.ibm.com/quantum/blog", "name": "IBM Quantum", "lang": "en", "level": "A" },
+      { "url": "https://news.microsoft.com/signal/", "name": "Microsoft News", "lang": "en", "level": "A" },
+      { "url": "https://nvidianews.nvidia.com/", "name": "NVIDIA Newsroom", "lang": "en", "level": "A" },
+      { "url": "https://www.ionq.com/blog", "name": "IonQ Blog", "lang": "en", "level": "A" },
+      { "url": "https://www.idquantique.com/category/latest-news/", "name": "ID Quantique", "lang": "en", "level": "A" },
+      { "url": "https://www.dwavequantum.com/company/newsroom/", "name": "D-Wave Newsroom", "lang": "en", "level": "A" },
+      { "url": "https://investors.rigetti.com/news-events/news-releases", "name": "Rigetti Investors", "lang": "en", "level": "A" },
+      { "url": "https://quantumcomputinginc.com/news", "name": "QCI News", "lang": "en", "level": "A" },
+      { "url": "https://arqitgroup.com/resources/tag/press-releases", "name": "Arqit", "lang": "en", "level": "A" },
+      { "url": "https://www.xanadu.ai/press", "name": "Xanadu", "lang": "en", "level": "A" },
+      { "url": "https://www.quantinuum.com/news/news#press-release", "name": "Quantinuum", "lang": "en", "level": "A" },
+      { "url": "https://www.psiquantum.com/news", "name": "PsiQuantum", "lang": "en", "level": "A" },
+      { "url": "https://www.pasqal.com/newsroom/", "name": "Pasqal", "lang": "en", "level": "A" },
+      { "url": "https://infleqtion.com/newsroom/", "name": "Infleqtion", "lang": "en", "level": "A" },
+      { "url": "https://quantumxc.com/news-resources/", "name": "QuantumXC", "lang": "en", "level": "A" },
+      { "url": "https://www.toshiba.eu/quantum/", "name": "Toshiba Quantum", "lang": "en", "level": "A" },
+      { "url": "https://www.google.com", "name": "Google Quantum AI", "lang": "en", "level": "A" }
+    ]
+  }
+}
