@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量子科技产业日报 | 2026年6月12日 | 科大国盾量子</title>
+<style>
+:root {
+  --bg: #0a0e17; --surface: #111827; --card: #161c2a; --card-hover: #1c2436;
+  --border: #1e2a3a; --border-light: #263040;
+  --text: #e2e8f0; --t2: #8892a8; --t3: #5a6478;
+  --cyan: #00d4ff; --cyan-glow: rgba(0,212,255,.25);
+  --green: #00e676; --green-glow: rgba(0,230,118,.25);
+  --orange: #ff9100; --orange-glow: rgba(255,145,0,.25);
+  --red: #ff3d5a; --red-glow: rgba(255,61,90,.3);
+  --purple: #a855f7; --purple-glow: rgba(168,85,247,.25);
+  --blue: #3b82f6;
+  --r: 14px; --r-sm: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,212,255,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 90% 80%, rgba(168,85,247,.04), transparent),
+    radial-gradient(ellipse 50% 50% at 10% 50%, rgba(0,230,118,.03), transparent);
+}
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border-light); border-radius:10px; }
+
+/* Header */
+.hd {
+  background:rgba(17,24,39,.9); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); padding:0 28px; height:66px; display:flex;
+  align-items:center; justify-content:space-between; position:sticky; top:0; z-index:99;
+}
+.hd-l { display:flex; align-items:center; gap:16px; }
+.hd-logo { display:flex; align-items:center; gap:10px; }
+.hd-logo .q-icon { width:34px; height:34px; border-radius:var(--r-sm); background:linear-gradient(135deg, var(--cyan), var(--purple)); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:#fff; }
+.hd-logo h1 { font-size:17px; font-weight:700; letter-spacing:-.3px; background:linear-gradient(135deg,#e2e8f0,#a0b4d0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hd-r { display:flex; align-items:center; gap:12px; }
+.hd-date { font-size:13px; color:var(--t2); }
+.ct { max-width:1440px; margin:0 auto; padding:20px 24px; }
+
+/* Stat cards */
+.sr { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:24px; }
+.sc {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:18px 20px; position:relative; overflow:hidden; transition:all .25s;
+}
+.sc:hover { border-color:var(--border-light); transform:translateY(-1px); box-shadow:0 4px 20px rgba(0,0,0,.3); }
+.sc::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.sc:nth-child(1)::after { background:var(--cyan); }
+.sc:nth-child(2)::after { background:var(--blue); }
+.sc:nth-child(3)::after { background:var(--purple); }
+.sc:nth-child(4)::after { background:var(--red); }
+.sc:nth-child(5)::after { background:var(--orange); }
+.sc:nth-child(6)::after { background:var(--green); }
+.sc .l { font-size:11px; color:var(--t3); text-transform:uppercase; letter-spacing:.8px; font-weight:500; }
+.sc .v { font-size:28px; font-weight:800; margin-top:4px; letter-spacing:-1px; }
+.sc .icon-stat { position:absolute; right:14px; bottom:12px; font-size:28px; opacity:.08; }
+
+/* Category tabs */
+.tabs { display:flex; gap:4px; margin-bottom:20px; flex-wrap:wrap; }
+.tab-btn { padding:10px 24px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--t2); cursor:pointer; font-size:13px; font-weight:600; transition:all .2s; }
+.tab-btn:hover { color:var(--text); border-color:var(--border-light); }
+.tab-btn.active { background:var(--blue); border-color:var(--blue); color:#fff; box-shadow:0 2px 12px rgba(59,130,246,.3); }
+.tab-count { font-size:11px; opacity:.7; margin-left:4px; }
+
+/* Tab panels */
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* News cards */
+.news-list { display:flex; flex-direction:column; gap:10px; }
+.news-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:18px 22px; transition:all .2s;
+}
+.news-card:hover { border-color:var(--border-light); background:var(--card-hover); }
+.news-hdr { display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+.tag { font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.5px; }
+.tag-policy { background:rgba(59,130,246,.15); color:var(--blue); border:1px solid rgba(59,130,246,.3); }
+.tag-industry { background:rgba(168,85,247,.15); color:var(--purple); border:1px solid rgba(168,85,247,.3); }
+.tag-research { background:rgba(0,212,255,.15); color:var(--cyan); border:1px solid rgba(0,212,255,.3); }
+.tag-competitor { background:rgba(255,145,0,.15); color:var(--orange); border:1px solid rgba(255,145,0,.3); }
+.confidence { font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; }
+.conf-high { background:rgba(0,230,118,.12); color:var(--green); }
+.conf-medium { background:rgba(255,145,0,.12); color:var(--orange); }
+.news-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:6px; line-height:1.4; }
+.news-summary { font-size:13px; color:var(--t2); margin-bottom:8px; line-height:1.6; }
+.news-meta { display:flex; align-items:center; gap:12px; font-size:12px; color:var(--t3); flex-wrap:wrap; }
+.news-source { display:flex; align-items:center; gap:4px; }
+.news-link { color:var(--cyan); text-decoration:none; font-weight:500; transition:opacity .2s; }
+.news-link:hover { opacity:.8; }
+.news-link::after { content:' ↗'; font-size:10px; }
+
+/* Competitor tracker */
+.tracker-table { width:100%; border-collapse:collapse; font-size:13px; }
+.tracker-table th { text-align:left; padding:10px 14px; background:var(--surface); color:var(--t3); font-size:10px; text-transform:uppercase; letter-spacing:.8px; font-weight:600; border-bottom:1px solid var(--border); }
+.tracker-table td { padding:12px 14px; border-bottom:1px solid rgba(30,42,58,.5); color:var(--t2); }
+.tracker-table tr:hover td { background:rgba(255,255,255,.02); }
+.tracker-table .t0-badge { display:inline-block; background:var(--orange); color:#000; font-size:9px; font-weight:800; padding:2px 6px; border-radius:3px; }
+.tracker-table a { color:var(--cyan); text-decoration:none; }
+.tracker-table a:hover { text-decoration:underline; }
+
+/* Section headers */
+.sec-hd { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.sec-hd h2 { font-size:18px; font-weight:700; }
+.sec-divider { flex:1; height:1px; background:var(--border); }
+
+/* Footer */
+.ft { border-top:1px solid var(--border); margin-top:32px; padding:20px 24px; text-align:center; }
+.ft p { font-size:12px; color:var(--t3); line-height:1.8; }
+.ft a { color:var(--cyan); text-decoration:none; }
+.ft a:hover { text-decoration:underline; }
+.ft-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:1440px; margin:0 auto 16px; text-align:left; }
+.ft-col h4 { font-size:12px; color:var(--t3); text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; }
+.ft-col p,.ft-col ul { font-size:12px; color:var(--t3); }
+.ft-col ul { list-style:none; padding:0; }
+.ft-col ul li { margin-bottom:4px; }
+
+/* No data placeholder */
+.no-data { text-align:center; padding:40px; color:var(--t3); font-size:14px; }
+
+/* Responsive */
+@media(max-width:1200px){ .sr { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:768px) { .sr { grid-template-columns:repeat(2,1fr); } .hd { padding:0 14px; } .ct { padding:12px 10px; } .news-card { padding:14px; } .ft-grid { grid-template-columns:1fr; } }
+@media(max-width:480px) { .sr { grid-template-columns:1fr; } }
+
+/* Print styles */
+@media print {
+  body { background:#fff; color:#000; }
+  .hd { background:#f5f5f5; position:static; }
+  .news-card { background:#fff; border:1px solid #ddd; page-break-inside:avoid; }
+  .news-summary { color:#555; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="hd">
+  <div class="hd-l">
+    <div class="hd-logo">
+      <div class="q-icon">Q</div>
+      <h1>量子科技产业日报</h1>
+    </div>
+  </div>
+  <div class="hd-r">
+    <span class="hd-date">📅 2026年6月12日</span>
+    <span style="font-size:11px;color:var(--t3);">科大国盾量子 · QuantumCTek</span>
+  </div>
+</header>
+
+<div class="ct">
+
+<!-- ============ STATISTICS BAR ============ -->
+<div class="sr">
+  <div class="sc">
+    <div class="l">总快讯</div>
+    <div class="v">93</div>
+  </div>
+  <div class="sc">
+    <div class="l">📋 政策动态</div>
+    <div class="v">5</div>
+  </div>
+  <div class="sc">
+    <div class="l">🏭 产业动态</div>
+    <div class="v">46</div>
+  </div>
+  <div class="sc">
+    <div class="l">🔬 科研进展</div>
+    <div class="v">42</div>
+  </div>
+  <div class="sc">
+    <div class="l">🎯 T0友商</div>
+    <div class="v">8</div>
+  </div>
+  <div class="sc">
+    <div class="l">💎 重大突破</div>
+    <div class="v">8</div>
+  </div>
+</div>
+
+<!-- ============ TAB BUTTONS ============ -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('policy')">📋 政策动态<span class="tab-count">(5)</span></button>
+  <button class="tab-btn" onclick="switchTab('industry')">🏭 产业动态<span class="tab-count">(46)</span></button>
+  <button class="tab-btn" onclick="switchTab('research')">🔬 科研进展<span class="tab-count">(42)</span></button>
+  <button class="tab-btn" onclick="switchTab('competitor')">🎯 T0友商追踪<span class="tab-count">(8)</span></button>
+</div>
+
+<!-- ============ POLICY TAB ============ -->
+<div id="tab-policy" class="tab-panel active">
+  <div class="sec-hd"><h2>📋 政策动态</h2><div class="sec-divider"></div></div>
+  <div class="news-list">
+    
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-policy">政策</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">SETU参与4.6亿欧元国家研究投资</div>
+      <div class="news-summary">爱尔兰东南理工大学（SETU）将在爱尔兰4.6亿欧元国家研究投资中发挥关键作用，量子计算是重点领域之一，以推动区域创新。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/setu-researchers-to-play-key-role-in-new-e460-million-national-research-investment/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-policy">政策</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">澳大利亚量子国家杠杆战略</div>
+      <div class="news-summary">文章分析澳大利亚如何将量子研究优势转化为国家战略资产，讨论其向量子产业发展的转折点及相关政策动向。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/03/19/from-research-strength-to-national-leverage-australias-quantum-inflection-point/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-policy">政策</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">英部长称将量科转经济增长</div>
+      <div class="news-summary">2026年6月10日英国科技部长表示，英国计划将量子科学领先优势转化为经济增长，通过投资与战略合作，打造量子产业高地。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/10/uk-poised-to-turn-scientific-excellence-in-quantum-into-economic-growth-minister-says/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-policy">政策</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">美日承诺10亿美元联合量子研</div>
+      <div class="news-summary">2026年6月8日美国与日本政府承诺投入10亿美元，联合开展量子与先进计算研究，加强双边技术联盟，应对全球竞争。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/08/us-and-japan-commit-1-billion-to-joint-quantum-and-advanced-computing-research/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-policy">政策</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">英议会告诫量子政策失误风险</div>
+      <div class="news-summary">2026年6月4日英国跨党派议会小组警告，若政府不立即行动，英国在量子领域可能重蹈半导体���人工智能的覆辙，错失全球领导地位。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/04/uk-risks-repeating-semiconductor-and-ai-mistakes-unless-government-acts-now-on-quantum-warns-cross-party-parliamentary-group/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ INDUSTRY TAB ============ -->
+<div id="tab-industry" class="tab-panel">
+  <div class="sec-hd"><h2>🏭 产业动态</h2><div class="sec-divider"></div></div>
+  <div class="news-list">
+    
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">BW Digital与NUS开发量子就绪数据中心</div>
+      <div class="news-summary">BW Digital与新加坡国立大学（NUS）合作，为东南亚地区开发量子就绪数据中心，旨在提升数据中心应对量子计算时代的安全与算力需求。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/bw-digital-and-nus-to-advance-quantum-ready-data-centres-for-southeast-asia/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Pasqal在意大利启动首台中性原子量子计算机</div>
+      <div class="news-summary">Pasqal在意大利CINECA超算中心正式启动该国首台中子原子量子计算机，这也是其在欧洲部署的第三套量子系统，将服务于科研与工业应用。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/pasqal-inaugurates-italys-first-neutral-atom-quantum-computer-third-system-europe/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Horizon Quantum在都柏林建立第二测试平台</div>
+      <div class="news-summary">Horizon Quantum宣布选择爱尔兰都柏林作为其第二个量子计算机试验台地点，进一步扩展其在欧洲的量子计算研发基础设施。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/horizon-quantum-dublin-second-quantum-computer-testbed-ireland/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">IQM</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">IQM量子计算机安装于意大利CINECA</div>
+      <div class="news-summary">IQM量子计算机已在意大利CINECA超算中心完成安装，将与现有超算资源集成，为科研和产业用户提供量子计算服务。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/iqm-quantum-computer-installed-cineca-italy/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Alice &amp; Bob推出首个量子系统供研究</div>
+      <div class="news-summary">Alice &amp; Bob发布其首个量子系统，基于猫量子比特技术，将开放给研究合作伙伴使用，旨在推动容错量子计算发展。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/alice-bob-unveils-first-quantum-system-available-for-research-partners/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Firgun完成对硅量子计算公司首笔澳投资</div>
+      <div class="news-summary">澳大利亚风投Firgun Ventures宣布对硅量子计算公司Silicon Quantum Computing进行其在澳的首笔投资，支持硅基量子处理器研发。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/firgun-ventures-announces-first-australian-investment-in-silicon-quantum-computing/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">EigenQ任命首席增长官推动全球扩张</div>
+      <div class="news-summary">量子技术公司EigenQ任命Rika Nakazawa为首席增长官，负责引领公司全球业务扩张与市场增长战略。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/eigenq-names-rika-nakazawa-chief-growth-officer-global-expansion/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">硅量子计算获NRFC额外4000万澳元</div>
+      <div class="news-summary">澳大利亚国家重建基金公司（NRFC）向硅量子计算公司追加4000万澳元投资，加速其硅基量子计算机的商业化进程。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/silicon-quantum-computing-secures-additional-aud40-million-from-australias-nrfc/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">Microsoft</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">微软Windows集成后量子密码学</div>
+      <div class="news-summary">微软在Windows 11与Windows Server 2025系统中支持后量子密码学功能，以抵御未来量子计算机带来的安全威胁，提升系统安全性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子快讯</span>
+        <a href="http://www.qtc.com.cn/flash/178098854034271.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">IBM</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">IBM未来五年投入百亿美元加速量子计算</div>
+      <div class="news-summary">IBM宣布未来五年将投资100亿美元，用于加速量子计算硬件、软件及生态系统的研发，以巩固其全球领导地位。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子快讯</span>
+        <a href="http://www.qtc.com.cn/flash/178045494033835.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Xanadu光子芯片封装树立新标杆</div>
+      <div class="news-summary">加拿大光量子计算公司Xanadu在光子芯片封装领域取得突破，树立了新的行业标杆，有助于提升光量子计算硬件的性能与可扩展性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178124932034591.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">PINQ²与Numana整合量子计算和通信</div>
+      <div class="news-summary">PINQ²与Numana达成战略合作，整合双方在量子计算和量子通信领域的互补技术专长，共同推动量子解决方案落地。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178124732034589.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">中科酷原探量子计算+应用新机遇</div>
+      <div class="news-summary">中科酷原携手各界，通过供需精准对接，共同探索“量子计算+”在行业应用中的新机遇，推动量子计算技术落地。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178123344534506.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Colt与Ciena完成跨大西洋800GbE量子安全传输</div>
+      <div class="news-summary">Colt与Ciena合作，成功完成跨大西洋800GbE量子安全数据传输试验，刷新距离和速率记录。试验采用量子安全加密应对量子计算机威胁，验证了长距离高速量子安全通信的商用可行性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178123036034602.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">JIJ与ORCA发布混合优化白皮书</div>
+      <div class="news-summary">JIJ联合ORCA Computing等发布白皮书，指出混合量子-经典优化算法正向能源行业商业应用迈进，展示了在电网调度、能源分配等场景的潜力，推动量子计算实用化。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178122936034601.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Xanadu超低损耗光子芯片封装突破</div>
+      <div class="news-summary">光量子计算公司Xanadu在超低损耗光子芯片封装技术上取得突破，显著提升光子量子处理器的性能与可扩展性，向实用化光量子计算机迈出重要一步。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178122736034599.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Nu Quantum分布式量子计算新突破</div>
+      <div class="news-summary">Nu Quantum在分布式量子计算架构中取得进展，实现单量子处理单元失效时网络整体可继续运转，增强容错能力，为构建大规模量子互联网提供关键支撑。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178122636034598.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">PINQ²与Numana合作推动量子融合</div>
+      <div class="news-summary">PINQ²与Numana达成战略合作，旨在推动量子计算与量子通信融合发展，加速量子网络解决方案研发与商业化落地，拓展跨行业应用场景。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178122536034597.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">本源量子</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">本源量子完成近30亿元Pre-IPO融资</div>
+      <div class="news-summary">本源量子完成近30亿元Pre-IPO轮融资，估值突破200亿元。资金将投入超导和半导体量子计算机研发及云平台建设，巩固其国内量子计算领先地位。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178091184234261.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Quemix与日产开发量子空气动力学软件</div>
+      <div class="news-summary">日本量子计算公司Quemix与日产汽车合作，启动基于量子计算机的下一代空气动力学仿真软件研发，旨在缩短设计周期并提升车辆性能，探索汽车工业量子优势。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/article/178064964233943.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">西班牙国家超算第三台量子计算机上线</div>
+      <div class="news-summary">西班牙国家超算中心第三台量子计算机上线并向全欧洲开放，作为EuroHPC项目组成部分，将为科研与产业提供量子计算资源，强化欧洲量子生态。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/article/178064850233947.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">芬兰启动Q-GEN探索量子计算与生命科学</div>
+      <div class="news-summary">芬兰启动Q-GEN项目，探索量子计算���生命科学领域的融合应用，覆盖药物发现、基因分析等方向，加速欧洲量子计算跨学科应用落地。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178062780034056.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">QuiX Quantum首次完成前馈控制单元安装</div>
+      <div class="news-summary">荷兰光量子计算公司QuiX Quantum在其光量子处理器上首次完成前馈控制单元安装，实现测量结果的实时反馈调控，是构建通用光量子计算机的关键里程碑。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178062576034058.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">可信节点多芯光纤QKD部署达300公里</div>
+      <div class="news-summary">实验展示基于可信节点的量子密钥分发网络部署，采用多芯光纤接入链路在300公里传输距离实现安全成码，解决了长距传输、异构光纤及与经典业务共存等实际挑战。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/reference/178071434034079.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">构建欧洲量子盾牌：大陆QKD战略</div>
+      <div class="news-summary">该战略视角文章提出在欧盟全境部署量子密钥分发基础设施的构想，以应对量子计算对现有密码体系的威胁。文章论证了建设大陆级QKD网络的战略必要性，分析了技术、政策、标准化及投资等方面的挑战，并给出了分阶段实施路径，旨在为欧洲构建抗量子攻击的安全通信盾牌。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177976566432993.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子抗性网络：原语与最佳实践</div>
+      <div class="news-summary">该综述全面覆盖量子抗性网络的核心原语、协议及部署最佳实践。面对大规模量子计算对公钥密码的威胁，文章梳理了后量子密码学标准化进展，详细分析了TLS、SSH等协议迁移中的工程挑战和兼容性方案，并总结了混合模式、敏捷性架构等最佳实践，为网络安全向量子安全过渡提供蓝图。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177907408632412.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">澳大利亚支付平台PQC迁移模拟</div>
+      <div class="news-summary">研究对澳大利亚新支付平台（NPP）进行了后量子密码迁移的蒙特卡洛模拟。NPP每日处理520万笔交易且有严格延迟要求，模拟评估了在密码相关量子计算机威胁来临前迁移至PQC的时间窗口、系统性能影响和过渡策略，为该国实时支付基础设施的抗量子升级提供了量化决策依据。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177812190231233.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子安全与能源系统小组讨论</div>
+      <div class="news-summary">EPRI组织小组讨论，探讨量子计算对能源系统带来的安全威胁及量子安全解决方案，推动电网后量子密码迁移意识。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/04/14/epri-hosts-panel-on-quantum-security-and-the-future-of-energy-systems/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">富士通量子金融网络研讨会</div>
+      <div class="news-summary">富士通将主办面向英国地区的量子计算网络研讨会，探讨量子技术在金融服务领域带来的实际价值与应用前景。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/02/12/fujitsu-to-host-uk-focused-quantum-webinar-on-practical-value-for-financial-services/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子威胁与AI安全融合</div>
+      <div class="news-summary">文章指出量子安全威胁与人工智能暴露风险正在快速融合，企业需要加速采用新安全范式以应对双重挑战。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/02/09/from-quantum-threat-to-ai-exposure-why-security-is-converging-faster-than-enterprises-expect/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子计算职位与薪资2026</div>
+      <div class="news-summary">2026年量子计算行业就业市场概览，列出需求量最大的顶级职位及对应薪资水平，反映人才竞争态势。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/05/29/quantum-computing-jobs-and-salaries-in-2026/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">IBM,Google,Microsoft,IonQ,Rigetti</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子计算芯片公司2026</div>
+      <div class="news-summary">盘点2026年全球主要量子计算芯片开发商，涵盖IBM、Google、Microsoft、IonQ、Rigetti等企业，呈现技术路线与竞争格局。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span><span class="tag tag-competitor">本源量子,国仪量子,玻色量子</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">中国量子计算公司概览2026</div>
+      <div class="news-summary">介绍超过十家中国量子计算领先企业，包括本源量子、玻色量子、国仪量子等，展现中国量子产业生态与研发力量。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/05/15/10-plus-companies-leading-the-quantum-technologies-race-in-china/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子计算八大行业用例</div>
+      <div class="news-summary">2026年5月4日The Quantum Insider文章探讨量子计算在金融、医药、物流等八个行业的实际应用场景，分析各领域如何利用量子算法解决复杂优化与分子模拟问题，指出早期用例正从理论走向试点，推动产业落地。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/05/04/quantum-computing-use-cases-real-applications-industries/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">“先窃后破”威胁及应对</div>
+      <div class="news-summary">2026年5月1日文章解释“先采集后解密”攻击模式：对手窃取加密数据，待量子计算机成熟后破解。强调组织需立即迁移至抗量子密码，保护长期敏感信息，避免未来大规模泄露。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/05/01/harvest-now-decrypt-later-why-should-you-care/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">新量子基金瞄准A/B轮瓶颈</div>
+      <div class="news-summary">2025年12月23日TQI独家报道，一只新量子基金设立，旨在解决量子初创企业A轮和B轮融资缺口，推动技术商业���，助力行业跨越“死亡谷”。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/12/23/tqi-exclusive-a-new-quantum-fund-takes-aim-at-the-industrys-series-a-bottleneck/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">QRS公司推动量子物流应用</div>
+      <div class="news-summary">2025年12月10日Quantum Research Sciences CEO Ethan Krimins介绍公司正将量子计算引入物流领域，开发路线规划与供应链管理等优化方案，展示近期商业价值。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/12/10/quantum-research-sciences-ceo-ethan-krimins-explains-how-company-is-bringing-quantum-to-logistics-now/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Fortaegis发布抗量子安全硬件</div>
+      <div class="news-summary">2025年5月13日初创公司Fortaegis宣称其硬件可应对当前安全挑战，并为后量子时代做好密码迁移准备，提供抗量子攻击解决方案。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/05/13/startup-fortaegis-says-its-hardware-ready-for-todays-security-challenges-perfectly-positioned-for-tomorrows-quantum-era/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Main Sequence量子风投新论</div>
+      <div class="news-summary">2025年3月27日TQI独家，Main Sequence基金发布最新投资论文，聚焦处于商业应用边缘的量子技术，指导资本押注即将商业化的量子计算与传感器公司。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/03/27/tqi-exclusive-main-sequences-latest-thesis-guides-quantum-bets-on-the-edge-of-commercial-use/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Defiance推出QTUP量子ETF</div>
+      <div class="news-summary">2026年6月9日Defiance公司扩展量子ETF产品线，推出QTUP，专门投资早期量子公司，为投资者提供高增长潜力的纯净量子敞口。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/09/defiance-expands-its-quantum-suite-with-qtup-targeting-early-stage-quantum-companies/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">QuantX Labs种子轮融资</div>
+      <div class="news-summary">2026年6月4日QuantX Labs宣布完成种子轮融资，由Serendipity Capital领投，资金将用于推进量子传感器技术研发与商业化。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/04/quantx-labs-announces-seed-round-with-serendipity-capital-lead-investor/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Quantinuum纳斯达克上市</div>
+      <div class="news-summary">2026年6月4日Quantinuum在纳斯达克首次公开发行，融资16.8亿美元，成为全球首家上市的大型集成量子计算公司，标志行业成熟里程碑。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/04/quantinuum-to-debut-on-nasdaq-after-raising-1-68-billion-in-ipo/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">OQC获2.6亿英镑C轮融资</div>
+      <div class="news-summary">2026年6月3日英国量子计算公司OQC完成2.6亿英镑C轮融资，资金将用于扩大超导量子比特系统研发与生产，加速商用。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/03/oqc-raises-260-million-in-series-c/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">QTREX获政府资助研量材</div>
+      <div class="news-summary">2026年6月9日QTREX公司获得政府拨款，推进用于量子计算的射频介质材料，有望降低损耗，提升量子比特相干性能。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/09/qtrex-awarded-government-grant-to-advance-rf-dielectric-material-for-quantum-computing/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Xanadu创始人呼吁量子素养</div>
+      <div class="news-summary">2026年6月9日Xanadu创始人表示，量子素养将成为加拿大未来竞争力的关键，呼吁加强教育与人才培养，应对量子技术变革。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/09/xanadu-founder-says-quantum-literacy-may-be-canadas-next-competitive-imperative/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-industry">产业</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Diamond Quanta金刚石技术获同行评审</div>
+      <div class="news-summary">Diamond Quanta公司宣布其面向量子器件的金刚石加工技术通过了同行评审验证，相关成果发表于学术期刊《Carbon Trends》。该技术聚焦于金刚石材料的设备级处理工艺，有望加速金刚石基量子传感或计算硬件的实用化进程，展现了公司在该领域的研发实力。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/10/diamond-quanta-announces-peer-reviewed-validation-of-device-relevant-diamond-processing-published-in-carbon-trends/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RESEARCH TAB ============ -->
+<div id="tab-research" class="tab-panel">
+  <div class="sec-hd"><h2>🔬 科研进展</h2><div class="sec-divider"></div></div>
+  <div class="news-list">
+    
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">JIJ与ORCA报告量子能源优化优势路径</div>
+      <div class="news-summary">JIJ与ORCA Computing联合发布报告，阐述在能源优化领域实现商业量子优势的技术路径，展示量子计算在能源行业的应用潜力。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/11/jij-and-orca-computing-report-on-path-to-commercial-quantum-advantage-in-energy-optimization/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span><span class="tag tag-competitor">Microsoft</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">微软发布Majorana 2拓扑量子芯片</div>
+      <div class="news-summary">微软发布Majorana 2拓扑量子芯片，宣称量子比特可靠性提升1000倍，为实用化拓扑量子计算迈出重要一步，但结果仍需学界验证。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子快讯</span>
+        <a href="http://www.qtc.com.cn/flash/178053716033953.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Xanadu光量子计算机实现量子优势</div>
+      <div class="news-summary">Xanadu的Borealis光量子计算机在36微秒内完成一项传统超算需9000年的高斯玻色采样任务，展示了光量子计算的量子优势。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子快讯</span>
+        <a href="http://www.qtc.com.cn/flash/178053516033951.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">研究显示多节点量子网络可容忍QPU故障</div>
+      <div class="news-summary">Nu Quantum最新研究表明，多节点量子网络架构可容忍单个量子处理器完全故障，保障网络整体运行，提升分布式量子计算鲁棒性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178124832034590.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">新型纠缠助力量子传感器消除噪声</div>
+      <div class="news-summary">科学家利用一种新型纠缠态来帮助量子传感器消除噪声，有望显著提升量子测量的精度和灵敏度，对量子传感应用有重要��义。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178124632034588.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">印度科学家用表面声波操控自旋流</div>
+      <div class="news-summary">印度科学家提出利用表面声波精准操控自旋流的新机制，该技术有望应用于量子传感器，实现对微弱信号的更高精度探测。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子文章</span>
+        <a href="http://www.qtc.com.cn/article/178124532034587.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">设计输入态增强变分量子算法可达性</div>
+      <div class="news-summary">最新研究提出通过精心设计量子电路输入态来增强变分量子算法的可达性，改善其优化表现，有望提升在量子化学、量子机器学习等领域的算法效率与实用性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/article/178123332134415.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">铁基超导体多重拓扑超导态演化研究</div>
+      <div class="news-summary">南京大学张鹏与合作团队系统研究了铁基超导体中多重拓扑超导态的演化规律，揭示超导序参量与拓扑性质的关联，为发展拓扑量子计算所需的马约拉纳准粒子操控提供重要材料与物理基础。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/article/178123176234416.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">杂质自旋成为量子自旋液体“见证者”</div>
+      <div class="news-summary">牛津大学物理学家开发出创新方法，将杂质自旋用作探测量子自旋液体的“见证者”，为实验上识别和表征这种奇异量子态提供了新途径，对探索非阿贝尔任意子及拓扑量子信息处理具有潜在意义。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178123136034603.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">综述：光子空间纠缠新量子资源</div>
+      <div class="news-summary">新综述指出，光子���间纠缠作为一种高维量子资源，在量子通信、量子成像与量子计量等领域具有关键应用前景，并系统总结了其产生、操控及集成化方法。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/flash/178122836034600.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">日本团队用单超冷原子实现纳米级成像</div>
+      <div class="news-summary">日本团队打造“原子相机”，利用单个超冷原子作为探针实现纳米级空间分辨率成像，为表面物理研究和量子传感器开发提供新型超灵敏测量手段。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/article/178064232133863.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">基于卫星的离散变量QKD协议性能评估</div>
+      <div class="news-summary">研究对基于卫星的离散变量量子密钥分发协议进行系统性能评估，分析不同轨道与参数下的密钥率及误码率，为星地量子保密通信网络设计提供理论指导。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/reference/178099116034314.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子计算安全综述</div>
+      <div class="news-summary">综述系统梳理了量子计算引发的安全威胁、对密码体系的冲击以及后量子密码和量子密钥分发等应对策略，强调构建量子时代新型信息安全架构的紧迫性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/reference/178088658234189.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">马约拉纳费米子运动实现实际量子门</div>
+      <div class="news-summary">研究利用马约拉纳费米子的运动成功演示实际量子门操作，验证了基于拓扑准粒子实现量子纠错与非局域逻辑门操控的可行性，推动拓扑量子计算发展。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/reference/178053388033866.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">金刚石NV色心高压光学稳定性研究</div>
+      <div class="news-summary">研究揭示金刚石氮空位色心在120 GPa以内的光学稳定性与光物理特性，验证其作为量子传感器在极端高压环境下的适用性，拓展了高压物理中的量子测量应用。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 科大国盾量子</span>
+        <a href="http://www.qtc.com.cn/reference/178038856033712.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子神经网络与量子机器学习研究进展</div>
+      <div class="news-summary">该综述探讨了量子神经网络和量子机器学习在数据分析、模式识别等任务中的研究进展。文章分析了量子计算在突破经典计算能力局限方面的潜力，并总结了当前量子机器学习算法的设计原理、应用场景及面临的挑战，为理解该交叉领域提供了宏观视角。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178030460033660.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">水下量子密钥分发协议性能分析</div>
+      <div class="news-summary">该研究对BB84、SARG04和纠缠基BBM92三种协议在水下量子密钥分发（UQKD）中的性能进行了比较分析。基于量子力学原理，UQKD可确保无条件安全通信，研究考虑水下信道的衰减和湍流特性，评估了各协议在密钥率、传输距离和误码率方面的表现，为水下安全通信网络设计提供依据。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178028316033556.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">地球同步轨道QKD有限密钥可行性</div>
+      <div class="news-summary">研究评估了通过地球静止轨道卫星进行量子密钥分发（QKD）在有限密钥长度下的可行性。分析指出GEO-QKD可建立大陆级连续安全通信，但信道损耗和有限统计涨落会影响安全性。研究结合有限密钥效应和实际器件参数，给出了可实现的安全密钥率，为未来天基QKD部署提供理论参考。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178028116033546.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">金刚石色心缺陷量子网络进展</div>
+      <div class="news-summary">该综述介绍了基于金刚石色心缺陷构建大规模量子网络的最新进展。色心缺陷（如NV中心）可作为量子网络节点，实现量子通信、分布式计算和传感等应用。文章总结了色心量子比特的相干控制、纠缠分发及与光子接口集成的关键技术，并展望了未来实现实用化量子网络的挑战与方向。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178027696033525.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子机器学习必要性的实证研究</div>
+      <div class="news-summary">该工作通过多维实证研究探讨量子机器学习在处理复杂图像识别任务时的必要性。随着视觉任务对算力需求增长，经典模型面临局限，研究实证比较了经典与量子模型在不同规模、噪声条件下的表现，分析了量子优势出现的条件，为判断量子机器学习实际价值提供了实验依据。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178003030033417.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">DV/CV量子密钥分发防御综述</div>
+      <div class="news-summary">该综述系统梳理了离散变量和连续变量量子密钥分发在实际部署中面临的各类攻击及防御方法。重点介绍了面向问题的经典与机器学习防御策略，针对设备缺陷、信道操控和有限密钥效应等实际安全漏洞，评述了可证明安全到实用化安全的转变路径，旨在提升QKD系统的现实安全性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/178002530033392.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">耗散猫量子比特翻转与混沌研究</div>
+      <div class="news-summary">研究揭示了玻色子猫量子比特中比特翻转率饱和及其与量子混沌的关联。理论上猫态光子数增加可指数抑制翻转，但实验发现大光子数下抑制失效。该工作分析了耗散、非线性和混沌动力学对量子纠错性能的影响，为优化超导猫量子比特设计和提升硬件高效纠错能力提供新理解。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177980382033176.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">混合量子-经典时间序列预测</div>
+      <div class="news-summary">该研究提出了一种混合量子-经典机器学习算法，用于公用事业规模的多输出时间序列预测。针对103户能源数据的非线性、多尺度季节性及序列强依赖性，算法利用量子计算优势处理复杂关联，经典部分负责特征提取，实现了比纯经典模型更准确的预测，为能源系统负荷预测提供新工具。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177980160033165.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">超导猫量子比特能量优势揭示</div>
+      <div class="news-summary">该工作研究了超导猫量子比特在解决特定问题时的能量优势，即量子计算相比经典计算可能节省的能源消耗。通过分析猫态量子比特纠错过程中的能量耗散和计算效率，论文初步量化了超导量子处理器的能源消耗，为评估量子计算机的能效比和可持续性提供了理论分析。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177933048032712.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">集成量子光子学超导单光子探测器</div>
+      <div class="news-summary">该综述介绍了用于集成量子光子学的超导单光子探测器最新进展。单光子探测是量子通信、计算和传感的基础技术，文章聚焦将超导纳米线单光子探测器与光子集成电路集成的方案，分析了耦合效率、探测效率、暗计数和时间抖动等关键指标，并探讨了实现可扩展、小型化量子光子芯片的前景。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177890456632381.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子计算机能源效率研究</div>
+      <div class="news-summary">该研究初步回答了量子计算机的能耗问题，量化比较了量子计算机与经典计算机���行特定任务时的能源效率。团队分析了不同量子计算平台的能耗组成，包括制冷、控制和读出部分，并讨论了实现量子能效优势的条件，为理解大规模量子计算的能耗规模和经济性提供了基准数据。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177890021032348.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">实用量子密钥分发数值安全分析</div>
+      <div class="news-summary">该工作发展了针对实用量子密钥分发系统的数值安全分析方法。由于实际器件与理想模型存在偏差，理论上的信息论安全可能受损。研究通过有限密钥效应和侧信道泄漏的数值建模，对典型QKD实现进行严格安全可证明分析，为量化实际安全性边界和指导高安全系统设计提供了工具。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177881433832257.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">Apple M4 Pro量子电路模拟研究</div>
+      <div class="news-summary">该研究在Apple M4 Pro统一内存架构上对状态向量量子电路模拟进行了内存层级转换特性分析。量子电路仿真受内存带宽限制，团队通过对照实验揭示了不同内存层级、访问模式与硬件并行性之间的相互作用，评估了Apple芯片在量子计算模拟中的实际效能，为选择高性能计算平台提供了参考。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177864455032105.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">双物种里德伯阵列稳定子读出</div>
+      <div class="news-summary">该研究在双物种中性原子阵列上实现了多比特稳定子的高保真度读出。利用不同原子种类分别作为数据量子比特和辅助量子比特，研究展示了低串扰局域测量能力，这是量子纠错的关键一步。该工作验证了双物种平台在执行QEC协议方面的独特优势，为构建容错��性原子量子计算机奠定了基础。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177864285832034.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">50万量子比特分解2048位RSA整数</div>
+      <div class="news-summary">研究人员提出使用约50万量子比特的模原子处理器来分解2048位RSA整数的方案。相比传统Shor算法实现需要百万级量子比特，该方法通过模块化设计和分布式处理，显著降低了资源需求，并分析了在模原子（一种原子量子比特）平台上运行的可行性，向量子密码分析实用化迈出一步。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177813367431561.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">异构量子-经典超算蛋白质模拟</div>
+      <div class="news-summary">该工作开发了结合量子嵌入和经典超算的混合工作流程，用于处理超过12,000个原子的蛋白质-配体复合物量子化学计算。通过将大系统分割并用量子处理核心区域，团队突破了传统波函数方法的规模限制，展示了异构量子-经典架构在真实分子体系高精度模拟中的潜力，标志着量子计算在药物设计等领域的进展。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177812775831420.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">自由空间CVQKD自参考被动态制备</div>
+      <div class="news-summary">该研究演示了采用自参考被动态制备的高速率自由空间连续变量量子密钥分发方案。该方案克服了传统传输本地振荡器方案易受信道干扰的问题，通过简化的光学结构和自参考相位恢复，在自由空间信道中实现了稳定、低成本的高速密钥分发，为城市内视距和机载CVQKD应用提供了实用化技术。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177806392231300.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">可扩展连续变量量子网络</div>
+      <div class="news-summary">研究团队实现可扩展连续变量量子密钥分发网络，允许共享电信骨干网的多个终端用户进行安全通信，并纳入有限大小安全性分析，提升了CV-QKD实用化前景。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177805280731243.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">氮空位中心量子随机数生成</div>
+      <div class="news-summary">团队基于氮空位中心演示了量子随机数生成，利用量子力学内禀不可预测性产生高质量随机数，可应用于密码学与模拟等场景。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177752243031041.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">组合优化量子优势实验工作流</div>
+      <div class="news-summary">提出证明组合优化量子优势需端到端案例研究，将问题建模、量子计算执行与经典优化修正整合，推动实用量子优势验证。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177752045031026.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">半设备无关量子密钥分发</div>
+      <div class="news-summary">针对QKD发射端设备依赖的长期问题，提出单边设备无关方案，放宽对接收端的信任要求，增强实际安全性。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177752018631024.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">简易约瑟夫森结制���方法</div>
+      <div class="news-summary">研究展示采用光刻与氩离子刻蚀工艺的最小化超导约瑟夫森结制备方法，可简化超导量子比特的制造流程。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 国盾量子参考</span>
+        <a href="http://www.qtc.com.cn/reference/177751451030981.html" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span><span class="tag tag-competitor">Microsoft</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">微软几何纠错码迈向实用</div>
+      <div class="news-summary">2025年6月19日TQI独家，微软Krysta Svore称几何纠错码是实现实用量子应用的重要一步，可减少资源开销，加速拓扑量子比特路线，推动容错量子计算发展。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/06/19/tqi-exclusive-microsofts-krysta-svore-says-geometric-error-correcting-codes-are-a-step-toward-practical-applications/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子生物学前沿愿景</div>
+      <div class="news-summary">2025年5月29日文章采访量子生物学研究先驱，阐述量子效应在光合作用、磁感应等生物过程中的作用，并展望量子技术赋能医学与农业的潜力。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2025/05/29/whats-quantum-biology-a-research-pioneer-shares-his-vision-for-quantum-technologys-next-frontier/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">量子传感器突破助战场信号检测</div>
+      <div class="news-summary">2026年6月9日文章报道一种新型量子传感器可大幅提升战场上微弱信号检测能力，为军事侦察与电子战带来变革潜力。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/09/quantum-sensor-advance-could-transform-army-battlefield-signal-detection/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">约翰霍普金斯团队建模超导量子噪声</div>
+      <div class="news-summary">约翰霍普金斯大学的研究人员针对超导量子处理器开发了一种噪声建模方法。该研究旨在精确表征超导量子比特中的噪声源与演化规律，为提升量子门保真度和实现更有效的量子错误缓解提供理论工具。成果有望推动超导量子计算硬件的性能提升。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/10/johns-hopkins-team-models-quantum-noise-on-superconducting-processors/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <span class="tag tag-research">科研</span>
+        <span class="confidence conf-medium">待核实</span>
+      </div>
+      <div class="news-title">分布式量子计算能实现可扩展弹性系统</div>
+      <div class="news-summary">一项新研究表明，分布式量子计算架构可以实现具有弹性和可扩展性的大规模量子系统。研究探讨了通过模块化量子处理器互联来克服单芯片限制的理论与方法，验证了该方案在容错、负载均衡和系统扩展方面的优势，为构建实用量子互联网奠定了部分理论基础。</div>
+      <div class="news-meta">
+        <span class="news-source">📰 The Quantum Insider</span>
+        <a href="https://thequantuminsider.com/2026/06/10/new-research-shows-distributed-quantum-computing-can-enable-resilient-and-elastic-systems-at-scale/" target="_blank" class="news-link">查看原文</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COMPETITOR TAB ============ -->
+<div id="tab-competitor" class="tab-panel">
+  <div class="sec-hd"><h2>🎯 T0 友商动态追踪</h2><div class="sec-divider"></div></div>
+  <table class="tracker-table"><thead><tr><th>企业</th><th>T0</th><th>动态</th><th>来源</th></tr></thead><tbody><tr><td style="font-weight:600;color:var(--text);">IQM</td><td><span class="t0-badge">T0</span></td><td>IQM量子计算机安装于意大利CINECA</td><td><a href="https://thequantuminsider.com/2026/06/11/iqm-quantum-computer-installed-cineca-italy/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Microsoft</td><td><span class="t0-badge">T0</span></td><td>微软Windows集成后量子密码学</td><td><a href="http://www.qtc.com.cn/flash/178098854034271.html" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Microsoft</td><td><span class="t0-badge">T0</span></td><td>微软发布Majorana 2拓扑量子芯片</td><td><a href="http://www.qtc.com.cn/flash/178053716033953.html" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">IBM</td><td><span class="t0-badge">T0</span></td><td>IBM未来五年投入百亿美元加速量子计算</td><td><a href="http://www.qtc.com.cn/flash/178045494033835.html" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">本源量子</td><td><span class="t0-badge">T0</span></td><td>本源量子完成近30亿元Pre-IPO融资</td><td><a href="http://www.qtc.com.cn/flash/178091184234261.html" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">IBM</td><td><span class="t0-badge">T0</span></td><td>量子计算芯片公司2026</td><td><a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Google</td><td><span class="t0-badge">T0</span></td><td>量子计算芯片公司2026</td><td><a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Microsoft</td><td><span class="t0-badge">T0</span></td><td>量子计算芯片公司2026</td><td><a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">IonQ</td><td><span class="t0-badge">T0</span></td><td>量子计算芯片公司2026</td><td><a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Rigetti</td><td><span class="t0-badge">T0</span></td><td>量子计算芯片公司2026</td><td><a href="https://thequantuminsider.com/2026/06/05/how-many-quantum-chip-companies-are-there/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">本源量子</td><td><span class="t0-badge">T0</span></td><td>中国量子计算公司概览2026</td><td><a href="https://thequantuminsider.com/2026/05/15/10-plus-companies-leading-the-quantum-technologies-race-in-china/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">国仪量子</td><td><span class="t0-badge">T0</span></td><td>中国量子计算公司概览2026</td><td><a href="https://thequantuminsider.com/2026/05/15/10-plus-companies-leading-the-quantum-technologies-race-in-china/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">玻色量子</td><td><span class="t0-badge">T0</span></td><td>中国量子计算公司概览2026</td><td><a href="https://thequantuminsider.com/2026/05/15/10-plus-companies-leading-the-quantum-technologies-race-in-china/" target="_blank">来源 ↗</a></td></tr><tr><td style="font-weight:600;color:var(--text);">Microsoft</td><td><span class="t0-badge">T0</span></td><td>微软几何纠错码迈向实用</td><td><a href="https://thequantuminsider.com/2025/06/19/tqi-exclusive-microsofts-krysta-svore-says-geometric-error-correcting-codes-are-a-step-toward-practical-applications/" target="_blank">来源 ↗</a></td></tr></tbody></table>
+</div>
+
+</div><!-- /.ct -->
+
+<!-- ============ FOOTER ============ -->
+<footer class="ft">
+  <div class="ft-grid">
+    <div class="ft-col">
+      <h4>关于本报告</h4>
+      <p>本日报由 AI 自动生成，信息来源于全球权威政府网站、行业媒体、学术期刊及企业官方渠道。每条快讯均经过交叉验证，标注置信度。</p>
+    </div>
+    <div class="ft-col">
+      <h4>日报信息</h4>
+      <ul>
+        <li>📅 报告日期：2026年6月12日</li>
+        <li>⏰ 生成时间：15:46</li>
+        <li>📊 信源统计：The Quantum Insider(38)、国盾量子参考(25)、科大国盾量子(20)、国盾量子文章(6)、国盾量子快讯(4)</li>
+        <li>🏢 关注企业：9家</li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>科大国盾量子</h4>
+      <p>量子科技产业情报 · 内部参考<br>如需深度分析某企业或事件，请在 Claude Code 中告知。</p>
+    </div>
+  </div>
+  <p>© 2026 科大国盾量子技术股份有限公司 · 量子科技产业日报 · 自动生成 · 仅供参考</p>
+</footer>
+
+<!-- Tab switcher -->
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

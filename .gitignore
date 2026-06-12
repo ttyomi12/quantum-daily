@@ -2,3 +2,6 @@ node_modules/
 .env
 .DS_Store
 *.log
+scripts/run.js
+scripts/run2.js
+scripts/run3.js
