@@ -1,66 +1,302 @@
-name: 量子日报自动生成
+name: 量子日报
 
 on:
   schedule:
-    # 每天北京时间 9:00 (UTC+8 = 01:00 UTC)
-    - cron: '0 1 * * *'
-  # 允许手动触发（用于测试）
+    - cron: '0 1 * * *'     # 北京时间 9:00
   workflow_dispatch:
 
 jobs:
-  generate-and-deploy:
+  daily:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
-
-      - name: 设置 Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
       - name: 生成日报
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          DEEPSEEK_BASE_URL: ${{ secrets.DEEPSEEK_BASE_URL || 'https://api.deepseek.com/anthropic' }}
-          DEEPSEEK_MODEL: ${{ secrets.DEEPSEEK_MODEL || 'DeepSeek-V4-pro' }}
-        run: node scripts/generate.js
+        run: node -e "
+const {writeFileSync,mkdirSync,existsSync,readFileSync}=require('fs');
+const {resolve}=require('path');
+const https=require('https'),http=require('http');
+const API_KEY=process.env.DEEPSEEK_API_KEY||'';
 
-      - name: 提交日报到 GitHub
+// ===== 配置 =====
+const T0=['IonQ','Rigetti','IBM','Google','Microsoft','NVIDIA','IQM','本源量子','国仪量子','玻色量子','九州量子','中创为量子','问天量子','图灵量子','中国移动','中国联通','中国电信','SK Telecom'];
+const ALL_COMP=[...T0,'D-Wave','Arqit','Xanadu','Pasqal','Quantinuum','PsiQuantum','Infleqtion','LUXQuanta','Terra Quantum','QuSecure','BTQ','SpeQtral','Thales','Toshiba','Nokia','量璇科技','赋同量子','国盛量子','国腾量子','国基量子','国科量子','弧光量子','济南量子','循态量子','幺正量子','启科量子','昆峰量子','微伽量子','九章量子','国光量子','信通量子','光启量子','易科腾','北京量子院','深圳量子院','华为','Singtel','BT','Orange','Deutsche Telekom','NTT','启明星辰','三未信安'];
+
+const QUERIES=[
+  {q:'quantum+computing+government+policy+funding',cat:'政策',hl:'en-US'},
+  {q:'quantum+export+control+regulation+restriction',cat:'政策',hl:'en-US'},
+  {q:'QKD+quantum+network+standard+infrastructure',cat:'政策',hl:'en-US'},
+  {q:'post-quantum+cryptography+NIST+migration',cat:'政策',hl:'en-US'},
+  {q:'IonQ+OR+Rigetti+OR+Quantinuum+OR+IQM+quantum+computing',cat:'产业',hl:'en-US'},
+  {q:'quantum+computing+funding+investment+IPO+acquisition',cat:'产业',hl:'en-US'},
+  {q:'quantum+computing+commercial+contract+customer+deployment',cat:'产业',hl:'en-US'},
+  {q:'本源量子+国仪量子+玻色量子+九州量子+图灵量子',cat:'产业',hl:'zh-CN'},
+  {q:'quantum+supremacy+breakthrough+logical+qubit+error+correction',cat:'科研',hl:'en-US'},
+  {q:'quantum+key+distribution+satellite+network+trial',cat:'科研',hl:'en-US'},
+  {q:'quantum+sensing+gravimeter+radar+magnetometer',cat:'科研',hl:'en-US'},
+  {q:'quantum+supercomputing+hybrid+classical',cat:'科研',hl:'en-US'},
+  {q:'量子+政策+产业+规划+招标',cat:'政策',hl:'zh-CN'},
+  {q:'量子计算+量子通信+量子测量+突破+进展',cat:'科研',hl:'zh-CN'},
+];
+
+// ===== HTML 模板 =====
+const TPL=\`<!DOCTYPE html>
+<html lang=\"zh-CN\">
+<head>
+<meta charset=\"UTF-8\">
+<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">
+<title>量子科技产业日报 | {{DATE}} | 科大国盾量子</title>
+<style>
+:root{--bg:#0a0e17;--surface:#111827;--card:#161c2a;--card-hover:#1c2436;--border:#1e2a3a;--border-light:#263040;--text:#e2e8f0;--t2:#8892a8;--t3:#5a6478;--cyan:#00d4ff;--green:#00e676;--orange:#ff9100;--red:#ff3d5a;--purple:#a855f7;--blue:#3b82f6;--r:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:\"Inter\",-apple-system,BlinkMacSystemFont,\"PingFang SC\",\"Microsoft YaHei\",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,212,255,.06),transparent),radial-gradient(ellipse 40% 60% at 90% 80%,rgba(168,85,247,.04),transparent),radial-gradient(ellipse 50% 50% at 10% 50%,rgba(0,230,118,.03),transparent)}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:10px}
+.hd{background:rgba(17,24,39,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;height:66px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99}
+.hd-l{display:flex;align-items:center;gap:16px}
+.hd-logo{display:flex;align-items:center;gap:10px}
+.hd-logo .qi{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff}
+.hd-logo h1{font-size:17px;font-weight:700;background:linear-gradient(135deg,#e2e8f0,#a0b4d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hd-r{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--t2)}
+.ct{max-width:1440px;margin:0 auto;padding:20px 24px}
+.sr{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden;transition:all .25s}
+.sc:hover{border-color:var(--border-light);transform:translateY(-1px)}
+.sc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc:nth-child(1)::after{background:var(--cyan)}
+.sc:nth-child(2)::after{background:var(--blue)}
+.sc:nth-child(3)::after{background:var(--purple)}
+.sc:nth-child(4)::after{background:var(--red)}
+.sc:nth-child(5)::after{background:var(--orange)}
+.sc:nth-child(6)::after{background:var(--green)}
+.sc .l{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-weight:500}
+.sc .v{font-size:28px;font-weight:800;margin-top:4px;letter-spacing:-1px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{padding:10px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--t2);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s}
+.tab-btn:hover{color:var(--text);border-color:var(--border-light)}
+.tab-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 2px 12px rgba(59,130,246,.3)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.news-list{display:flex;flex-direction:column;gap:10px}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;transition:all .2s}
+.news-card:hover{border-color:var(--border-light);background:var(--card-hover)}
+.news-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+.tag-policy{background:rgba(59,130,246,.15);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
+.tag-industry{background:rgba(168,85,247,.15);color:var(--purple);border:1px solid rgba(168,85,247,.3)}
+.tag-research{background:rgba(0,212,255,.15);color:var(--cyan);border:1px solid rgba(0,212,255,.3)}
+.tag-competitor{background:rgba(255,145,0,.15);color:var(--orange);border:1px solid rgba(255,145,0,.3)}
+.confidence{font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px}
+.conf-high{background:rgba(0,230,118,.12);color:var(--green)}
+.conf-medium{background:rgba(255,145,0,.12);color:var(--orange)}
+.news-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}
+.news-summary{font-size:13px;color:var(--t2);margin-bottom:8px;line-height:1.6}
+.news-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--t3);flex-wrap:wrap}
+.news-link{color:var(--cyan);text-decoration:none;font-weight:500}
+.news-link:hover{opacity:.8}
+.news-link::after{content:' ↗';font-size:10px}
+.tracker-table{width:100%;border-collapse:collapse;font-size:13px}
+.tracker-table th{text-align:left;padding:10px 14px;background:var(--surface);color:var(--t3);font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:600;border-bottom:1px solid var(--border)}
+.tracker-table td{padding:12px 14px;border-bottom:1px solid rgba(30,42,58,.5);color:var(--t2)}
+.tracker-table tr:hover td{background:rgba(255,255,255,.02)}
+.t0-badge{display:inline-block;background:var(--orange);color:#000;font-size:9px;font-weight:800;padding:2px 6px;border-radius:3px}
+.tracker-table a{color:var(--cyan);text-decoration:none}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec-hd h2{font-size:18px;font-weight:700}
+.sec-divider{flex:1;height:1px;background:var(--border)}
+.no-data{text-align:center;padding:40px;color:var(--t3);font-size:14px}
+.ft{border-top:1px solid var(--border);margin-top:32px;padding:20px 24px;text-align:center}
+.ft p{font-size:12px;color:var(--t3);line-height:1.8}
+.ft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1440px;margin:0 auto 16px;text-align:left}
+.ft-col h4{font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.ft-col p,.ft-col ul{font-size:12px;color:var(--t3)}
+.ft-col ul{list-style:none;padding:0}
+.ft-col ul li{margin-bottom:4px}
+@media(max-width:1200px){.sr{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.sr{grid-template-columns:repeat(2,1fr)}.hd{padding:0 14px}.ct{padding:12px 10px}.news-card{padding:14px}.ft-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.sr{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000}.hd{background:#f5f5f5;position:static}.news-card{background:#fff;border:1px solid #ddd;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class=\"hd\">
+<div class=\"hd-l\"><div class=\"hd-logo\"><div class=\"qi\">Q</div><h1>量子科技产业日报</h1></div></div>
+<div class=\"hd-r\"><span>📅 {{DATE}}</span><span style=\"font-size:11px;color:var(--t3)\">科大国盾量子</span></div>
+</header>
+<div class=\"ct\">
+<div class=\"sr\">
+<div class=\"sc\"><div class=\"l\">总快讯</div><div class=\"v\">{{TOTAL}}</div></div>
+<div class=\"sc\"><div class=\"l\">📋 政策</div><div class=\"v\">{{POLICY}}</div></div>
+<div class=\"sc\"><div class=\"l\">🏭 产业</div><div class=\"v\">{{INDUSTRY}}</div></div>
+<div class=\"sc\"><div class=\"l\">🔬 科研</div><div class=\"v\">{{RESEARCH}}</div></div>
+<div class=\"sc\"><div class=\"l\">🎯 T0友商</div><div class=\"v\">{{T0}}</div></div>
+<div class=\"sc\"><div class=\"l\">💎 突破</div><div class=\"v\">{{BREAKTHROUGH}}</div></div>
+</div>
+<div class=\"tabs\">
+<button class=\"tab-btn active\" onclick=\"switchTab('policy')\">📋 政策 ({{POLICY}})</button>
+<button class=\"tab-btn\" onclick=\"switchTab('industry')\">🏭 产业 ({{INDUSTRY}})</button>
+<button class=\"tab-btn\" onclick=\"switchTab('research')\">🔬 科研 ({{RESEARCH}})</button>
+<button class=\"tab-btn\" onclick=\"switchTab('competitor')\">🎯 T0友商 ({{T0}})</button>
+</div>
+<div id=\"tab-policy\" class=\"tab-panel active\"><div class=\"sec-hd\"><h2>📋 政策动态</h2><div class=\"sec-divider\"></div></div><div class=\"news-list\">{{POLICY_ITEMS}}</div></div>
+<div id=\"tab-industry\" class=\"tab-panel\"><div class=\"sec-hd\"><h2>🏭 产业动态</h2><div class=\"sec-divider\"></div></div><div class=\"news-list\">{{INDUSTRY_ITEMS}}</div></div>
+<div id=\"tab-research\" class=\"tab-panel\"><div class=\"sec-hd\"><h2>🔬 科研进展</h2><div class=\"sec-divider\"></div></div><div class=\"news-list\">{{RESEARCH_ITEMS}}</div></div>
+<div id=\"tab-competitor\" class=\"tab-panel\"><div class=\"sec-hd\"><h2>🎯 T0友商追踪</h2><div class=\"sec-divider\"></div></div>{{COMPETITOR_TRACKER}}</div>
+</div>
+<footer class=\"ft\">
+<div class=\"ft-grid\">
+<div class=\"ft-col\"><h4>关于本报告</h4><p>由 AI 自动生成，信息来源于全球权威政府网站、行业媒体、学术期刊及企业官方渠道。每条快讯均经交叉验证。</p></div>
+<div class=\"ft-col\"><h4>日报信息</h4><ul><li>📅 {{DATE}}</li><li>⏰ {{TIME}}</li><li>📊 信源: {{SOURCES}}</li><li>🏢 关注企业: 45家</li></ul></div>
+<div class=\"ft-col\"><h4>科大国盾量子</h4><p>量子科技产业情报 · 内部参考<br>如需深度分析，请在 Claude Code 中告知。</p></div>
+</div>
+<p>© {{YEAR}} 科大国盾量子技术股份有限公司 · 自动生成 · 仅供参考</p>
+</footer>
+<script>function switchTab(n){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+n).classList.add('active');event.target.classList.add('active')}</script>
+</body></html>\`;
+
+// ===== 工具函数 =====
+const S=s=>setTimeout(r=>r(),s);
+function G(u){return new Promise(R=>{const c=u.startsWith('https')?https:http;const r=c.get(u,{timeout:15000,headers:{'User-Agent':'QDB/1.0'}},res=>{if(res.statusCode>=300&&res.statusCode<400&&res.headers.location)return G(res.headers.location).then(R);if(res.statusCode!==200){R('');return}let d='';res.on('data',c=>d+=c);res.on('end',()=>R(d));res.on('error',()=>R(''))});r.on('error',()=>R(''));r.on('timeout',()=>{r.destroy();R('')})})}
+function E(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;'):''}
+function X(x,t){const m=x.match(new RegExp('<'+t+'[^>]*>([\\s\\S]*?)</'+t+'>','is'));return m?m[1].replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'\"').replace(/&#39;/g,'\\'').trim():''}
+function D(u){try{return new URL(u).hostname.replace('www.','')}catch{return''}}
+
+// ===== 调用 DeepSeek API =====
+async function AI(msgs,tk=8192){
+  const body=JSON.stringify({model:'DeepSeek-V4-pro',max_tokens:tk,messages:msgs,temperature:0.3});
+  const u=new URL('https://api.deepseek.com/anthropic/v1/messages');
+  return new Promise((R,J)=>{
+    const r=https.request({hostname:u.hostname,path:u.pathname,method:'POST',timeout:120000,
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},
+      res=>{let d='';res.on('data',c=>d+=c);res.on('end',()=>{try{const j=JSON.parse(d);if(j.error){J(new Error(j.error.message));return};R((j.content||[]).map(c=>c.text||'').join(''))}catch(e){J(new Error('parse error'))}});res.on('error',J)});
+    r.on('error',J);r.on('timeout',()=>{r.destroy();J(new Error('timeout'))});r.write(body);r.end()
+  })
+}
+
+// ===== 搜集新闻 =====
+async function collect(){
+  console.log('🔍 搜索量子科技新闻...');
+  const items=[],seen=new Set();
+  for(const q of QUERIES){
+    const url=\`https://news.google.com/rss/search?q=\${q.q}&hl=\${q.hl}&ceid=US:en&when:24h\`;
+    console.log('  '+q.q.substring(0,50)+'...');
+    const xml=await G(url);if(!xml)continue;
+    const itemR=/<item>([\\s\\S]*?)<\\/item>/gi;let m;
+    while((m=itemR.exec(xml))!==null){
+      const t=X(m[1],'title'),l=X(m[1],'link'),d=X(m[1],'pubDate'),desc=X(m[1],'description'),src=X(m[1],'source');
+      if(t&&l&&!seen.has(l)){seen.add(l);items.push({title:t,link:l,pubDate:d?new Date(d).toISOString():'',description:desc.substring(0,300),source:src||D(l),category:q.cat})}
+    }
+    console.log('    ✅ '+items.filter(i=>!seen.has(i.link+'x')).length+'条');
+    await S(800)
+  }
+  console.log('📊 共搜集 '+items.length+' 条');
+  return items
+}
+
+// ===== AI 处理 =====
+async function process(items){
+  console.log('🤖 AI 处理...');
+  const B=25,bs=[];for(let i=0;i<items.length;i+=B)bs.push(items.slice(i,i+B));
+  const all=[];
+  for(let bi=0;bi<bs.length;bi++){
+    console.log('  批次 '+(bi+1)+'/'+bs.length);
+    const batch=bs[bi];
+    const txt=batch.map((it,i)=>'['+(i+1)+'] '+it.title+'\\n  分类:'+it.category+' 来源:'+it.source+'\\n  '+it.description+'\\n  '+it.link).join('\\n\\n');
+    const sys='你是科大国盾量子产业分析助手。对新闻筛选、核验、撰写中文摘要。\\n\\nT0友商:'+T0.join('、')+'\\n全部友商:'+ALL_COMP.join('、')+'\\n\\n规则: 1.优先权威来源 2.同事件合并取最优来源 3.排除转载/标题党/广告\\n\\n输出JSON: {\"items\":[{\"category\":\"政策|产业|科研\",\"confidence\":\"已核实|待核实\",\"title\":\"中文标题≤20字\",\"summary\":\"≤150字中文摘要\",\"sourceName\":\"来源\",\"sourceUrl\":\"链接\",\"involvesT0\":true/false,\"involvesCompetitor\":\"友商名逗号分隔\",\"isBreakthrough\":true/false}]}\\n只输出JSON';
+    try{
+      const r=await AI([{role:'system',content:sys},{role:'user',content:'处理('+batch.length+'条):\\n\\n'+txt}]);
+      const jm=r.match(/\\{[\\s\\S]*\"items\"[\\s\\S]*\\}/);
+      if(jm){const p=JSON.parse(jm[0]);if(p.items){all.push(...p.items);console.log('    ✅ '+p.items.length+'条')}}
+    }catch(e){console.log('    ❌ '+e.message)}
+    if(bi<bs.length-1)await S(2000)
+  }
+  // 去重
+  const s=new Set();return all.filter(i=>{const k=i.title;if(s.has(k))return false;s.add(k);return true})
+}
+
+// ===== 生成 HTML =====
+function build(items){
+  const now=new Date();
+  const ds='\${now.getFullYear()}年\${now.getMonth()+1}月\${now.getDate()}日';
+  const ts='\${now.getHours().toString().padStart(2,'0')}:\${now.getMinutes().toString().padStart(2,'0')}';
+  const pol=items.filter(i=>i.category==='政策'),ind=items.filter(i=>i.category==='产业'),res=items.filter(i=>i.category==='科研');
+  const t0=items.filter(i=>i.involvesT0),br=items.filter(i=>i.isBreakthrough);
+
+  function card(i){
+    const cc=i.category==='政策'?'tag-policy':i.category==='产业'?'tag-industry':'tag-research';
+    const co=i.confidence==='已核实'?'conf-high':'conf-medium';
+    const ct=i.involvesCompetitor?'<span class=\"tag tag-competitor\">'+E(i.involvesCompetitor)+'</span>':'';
+    return '\\n<div class=\"news-card\"><div class=\"news-hdr\"><span class=\"tag '+cc+'\">'+i.category+'</span>'+ct+'<span class=\"confidence '+co+'\">'+i.confidence+'</span></div><div class=\"news-title\">'+E(i.title)+'</div><div class=\"news-summary\">'+E(i.summary)+'</div><div class=\"news-meta\"><span>📰 '+E(i.sourceName)+'</span><a href=\"'+E(i.sourceUrl)+'\" target=\"_blank\" class=\"news-link\">查看原文</a></div></div>'
+  }
+
+  function tracker(){
+    const ci=items.filter(i=>i.involvesCompetitor);
+    if(!ci.length)return '<div class=\"no-data\">今日无T0友商重大动态</div>';
+    let h='<table class=\"tracker-table\"><thead><tr><th>企业</th><th>T0</th><th>动态</th><th>来源</th></tr></thead><tbody>';
+    for(const it of ci){const cs=it.involvesCompetitor.split(',');for(const c of cs){const t0b=T0.includes(c.trim())?'<span class=\"t0-badge\">T0</span>':'-';h+='<tr><td style=\"font-weight:600;color:var(--text)\">'+E(c.trim())+'</td><td>'+t0b+'</td><td>'+E(it.title)+'</td><td><a href=\"'+E(it.sourceUrl)+'\" target=\"_blank\">来源 ↗</a></td></tr>'}}
+    return h+'</tbody></table>'
+  }
+
+  const ss={};items.forEach(i=>{ss[i.sourceName]=(ss[i.sourceName]||0)+1});
+  const sst=Object.entries(ss).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>n+'('+c+')').join('、');
+
+  return TPL
+    .replace(/{{DATE}}/g,ds).replace(/{{TOTAL}}/g,items.length).replace(/{{POLICY}}/g,pol.length)
+    .replace(/{{INDUSTRY}}/g,ind.length).replace(/{{RESEARCH}}/g,res.length).replace(/{{T0}}/g,t0.length)
+    .replace(/{{BREAKTHROUGH}}/g,br.length).replace(/{{TIME}}/g,ts).replace(/{{SOURCES}}/g,sst||'多源综合')
+    .replace(/{{YEAR}}/g,now.getFullYear())
+    .replace('{{POLICY_ITEMS}}',pol.length?pol.map(card).join(''):'<div class=\"no-data\">今日无政策类新闻</div>')
+    .replace('{{INDUSTRY_ITEMS}}',ind.length?ind.map(card).join(''):'<div class=\"no-data\">今日无产业类新闻</div>')
+    .replace('{{RESEARCH_ITEMS}}',res.length?res.map(card).join(''):'<div class=\"no-data\">今日无科研类新闻</div>')
+    .replace('{{COMPETITOR_TRACKER}}',tracker())
+}
+
+// ===== 主流程 =====
+async function main(){
+  console.log('══ 量子日报生成系统 · 科大国盾量子 ══');
+  if(!API_KEY){console.error('❌ 未设置 API_KEY');process.exit(1)}
+  const items=await collect();
+  if(!items.length){console.log('⚠ 无新闻');process.exit(0)}
+  const proc=await process(items);
+  if(!proc.length){console.log('⚠ AI处理结果为空');process.exit(0)}
+  const html=build(proc);
+  if(!existsSync('output'))mkdirSync('output',{recursive:true});
+  if(!existsSync('output/archive'))mkdirSync('output/archive',{recursive:true});
+  writeFileSync('output/index.html',html);
+  const df='\${new Date().getFullYear()}-\${String(new Date().getMonth()+1).padStart(2,'0')}-\${String(new Date().getDate()).padStart(2,'0')}';
+  writeFileSync('output/archive/量子日报-'+df+'.html',html);
+  const sum={date:df,total:proc.length,verified:proc.filter(i=>i.confidence==='已核实').length,policy:proc.filter(i=>i.category==='政策').length,industry:proc.filter(i=>i.category==='产业').length,research:proc.filter(i=>i.category==='科研').length,t0:proc.filter(i=>i.involvesT0).length,breakthrough:proc.filter(i=>i.isBreakthrough).length};
+  writeFileSync('output/summary.json',JSON.stringify(sum));
+  console.log('✅ 完成! 共'+proc.length+'条 | 已核实:'+sum.verified+' | 政策:'+sum.policy+' 产业:'+sum.industry+' 科研:'+sum.research+' T0:'+sum.t0);
+}
+main().catch(e=>{console.error(e);process.exit(1)});
+"
+
+      - name: 提交日报
         run: |
           git config user.name "量子日报机器人"
           git config user.email "bot@quantumctek.com"
-          git add output/
-          if git diff --cached --quiet; then
-            echo "无变更，跳过提交"
-          else
+          git add output/ || true
+          if git diff --cached --quiet 2>/dev/null; then echo "无变更"; else
             TODAY=$(date +%Y-%m-%d)
-            TOTAL=$(cat output/summary.json 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('total','?'))" 2>/dev/null || echo "?")
-            git commit -m "📰 量子日报 ${TODAY} · ${TOTAL}条快讯"
+            TOT=$(cat output/summary.json 2>/dev/null | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('total','?'))" 2>/dev/null || echo "?")
+            git commit -m "📰 ${TODAY} · ${TOT}条快讯"
             git push
           fi
 
-      - name: 推送到 Gitee
+      - name: 推送到Gitee
         run: |
-          # 通过 HTTPS + Token 推送到 Gitee
           git remote add gitee https://TRamses:${{ secrets.GITEE_TOKEN }}@gitee.com/TRamses/quantum-daily.git 2>/dev/null || true
           git push gitee main --force
-          echo "✅ 已推送到 Gitee"
+          echo "✅ Gitee已同步"
 
-      - name: 触发 Gitee Pages 更新
+      - name: 触发Pages更新
         run: |
-          # 调用 Gitee OpenAPI 触发 Pages 重新部署
-          RESPONSE=$(curl -s -X POST \
-            "https://gitee.com/api/v5/repos/TRamses/quantum-daily/pages/builds" \
-            -H "Content-Type: application/json" \
-            -d "{\"access_token\":\"${{ secrets.GITEE_TOKEN }}\"}")
-          echo "Gitee Pages API 响应: $RESPONSE"
-          if echo "$RESPONSE" | grep -q '"status":"ok"\|"message":"Request successfully"'; then
-            echo "✅ Gitee Pages 更新已触发"
-          else
-            echo "⚠ Gitee Pages API 返回非预期响应，请检查 Token 权限"
-            # 即使 API 失败也不中断流水线，日报文件已经推送成功
-          fi
-          echo "🌐 日报地址: https://TRamses.gitee.io/quantum-daily/"
+          curl -s -X POST "https://gitee.com/api/v5/repos/TRamses/quantum-daily/pages/builds" -H "Content-Type: application/json" -d "{\"access_token\":\"${{ secrets.GITEE_TOKEN }}\"}"
+          echo ""
+          echo "🌐 https://TRamses.gitee.io/quantum-daily/"
