@@ -1,0 +1,21 @@
+﻿2026-06-15T05:58:08.9719376Z ##[group]Run node scripts/run4.js
+2026-06-15T05:58:08.9719874Z [36;1mnode scripts/run4.js[0m
+2026-06-15T05:58:08.9916621Z shell: /usr/bin/bash -e {0}
+2026-06-15T05:58:08.9917046Z env:
+2026-06-15T05:58:08.9917302Z   DEEPSEEK_API_KEY: 
+2026-06-15T05:58:08.9917597Z ##[endgroup]
+2026-06-15T05:58:09.0254622Z node:internal/modules/cjs/loader:1210
+2026-06-15T05:58:09.0255342Z   throw err;
+2026-06-15T05:58:09.0255607Z   ^
+2026-06-15T05:58:09.0255753Z 
+2026-06-15T05:58:09.0256206Z Error: Cannot find module '/home/runner/work/quantum-daily/quantum-daily/scripts/run4.js'
+2026-06-15T05:58:09.0256879Z     at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+2026-06-15T05:58:09.0257429Z     at Module._load (node:internal/modules/cjs/loader:1038:27)
+2026-06-15T05:58:09.0258053Z     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+2026-06-15T05:58:09.0258618Z     at node:internal/main/run_main_module:28:49 {
+2026-06-15T05:58:09.0258990Z   code: 'MODULE_NOT_FOUND',
+2026-06-15T05:58:09.0259353Z   requireStack: []
+2026-06-15T05:58:09.0259632Z }
+2026-06-15T05:58:09.0259760Z 
+2026-06-15T05:58:09.0259895Z Node.js v20.20.2
+2026-06-15T05:58:09.0282316Z ##[error]Process completed with exit code 1.
