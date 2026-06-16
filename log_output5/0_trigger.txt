@@ -1,0 +1,229 @@
+﻿2026-06-16T02:30:20.8878651Z Current runner version: '2.335.1'
+2026-06-16T02:30:20.8903164Z ##[group]Runner Image Provisioner
+2026-06-16T02:30:20.8904139Z Hosted Compute Agent
+2026-06-16T02:30:20.8904781Z Version: 20260527.539
+2026-06-16T02:30:20.8905429Z Commit: a891dd388383b896fa6ac04a82c0b75cec981078
+2026-06-16T02:30:20.8906230Z Build Date: 2026-05-27T21:39:57Z
+2026-06-16T02:30:20.8906933Z Worker ID: {1b45ecb1-ac7a-41d3-8e1e-c330d55aeccd}
+2026-06-16T02:30:20.8907678Z Azure Region: centralus
+2026-06-16T02:30:20.8908358Z ##[endgroup]
+2026-06-16T02:30:20.8909780Z ##[group]Operating System
+2026-06-16T02:30:20.8910498Z Ubuntu
+2026-06-16T02:30:20.8911028Z 24.04.4
+2026-06-16T02:30:20.8912114Z LTS
+2026-06-16T02:30:20.8912761Z ##[endgroup]
+2026-06-16T02:30:20.8913333Z ##[group]Runner Image
+2026-06-16T02:30:20.8914033Z Image: ubuntu-24.04
+2026-06-16T02:30:20.8914658Z Version: 20260607.184.1
+2026-06-16T02:30:20.8915962Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260607.184/images/ubuntu/Ubuntu2404-Readme.md
+2026-06-16T02:30:20.8917503Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260607.184
+2026-06-16T02:30:20.8918515Z ##[endgroup]
+2026-06-16T02:30:20.8919629Z ##[group]GITHUB_TOKEN Permissions
+2026-06-16T02:30:20.8922179Z Contents: write
+2026-06-16T02:30:20.8922827Z Metadata: read
+2026-06-16T02:30:20.8923374Z ##[endgroup]
+2026-06-16T02:30:20.8926105Z Secret source: Actions
+2026-06-16T02:30:20.8927066Z Prepare workflow directory
+2026-06-16T02:30:20.9255412Z Prepare all required actions
+2026-06-16T02:30:20.9294902Z Getting action download info
+2026-06-16T02:30:21.2569657Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+2026-06-16T02:30:21.3399940Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-06-16T02:30:21.5339068Z Complete job name: trigger
+2026-06-16T02:30:21.6062815Z ##[group]Run actions/checkout@v4
+2026-06-16T02:30:21.6063704Z with:
+2026-06-16T02:30:21.6064168Z   repository: ttyomi12/quantum-daily
+2026-06-16T02:30:21.6068339Z   token: ***
+2026-06-16T02:30:21.6068777Z   ssh-strict: true
+2026-06-16T02:30:21.6069226Z   ssh-user: git
+2026-06-16T02:30:21.6069681Z   persist-credentials: true
+2026-06-16T02:30:21.6070184Z   clean: true
+2026-06-16T02:30:21.6070637Z   sparse-checkout-cone-mode: true
+2026-06-16T02:30:21.6071365Z   fetch-depth: 1
+2026-06-16T02:30:21.6071814Z   fetch-tags: false
+2026-06-16T02:30:21.6072265Z   show-progress: true
+2026-06-16T02:30:21.6072719Z   lfs: false
+2026-06-16T02:30:21.6073131Z   submodules: false
+2026-06-16T02:30:21.6073582Z   set-safe-directory: true
+2026-06-16T02:30:21.6074329Z ##[endgroup]
+2026-06-16T02:30:21.7169745Z Syncing repository: ttyomi12/quantum-daily
+2026-06-16T02:30:21.7171820Z ##[group]Getting Git version info
+2026-06-16T02:30:21.7172678Z Working directory is '/home/runner/work/quantum-daily/quantum-daily'
+2026-06-16T02:30:21.7173961Z [command]/usr/bin/git version
+2026-06-16T02:30:21.7278026Z git version 2.54.0
+2026-06-16T02:30:21.7304605Z ##[endgroup]
+2026-06-16T02:30:21.7318938Z Temporarily overriding HOME='/home/runner/work/_temp/72fffc8e-a933-452b-85b2-bf420dd6f746' before making global git config changes
+2026-06-16T02:30:21.7321416Z Adding repository directory to the temporary git global config as a safe directory
+2026-06-16T02:30:21.7324537Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/quantum-daily/quantum-daily
+2026-06-16T02:30:21.7374462Z Deleting the contents of '/home/runner/work/quantum-daily/quantum-daily'
+2026-06-16T02:30:21.7377940Z ##[group]Initializing the repository
+2026-06-16T02:30:21.7381907Z [command]/usr/bin/git init /home/runner/work/quantum-daily/quantum-daily
+2026-06-16T02:30:21.7503146Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-06-16T02:30:21.7504605Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-06-16T02:30:21.7505581Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-06-16T02:30:21.7506599Z hint: call:
+2026-06-16T02:30:21.7507123Z hint:
+2026-06-16T02:30:21.7507644Z hint: 	git config --global init.defaultBranch <name>
+2026-06-16T02:30:21.7508264Z hint:
+2026-06-16T02:30:21.7508842Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-06-16T02:30:21.7510490Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-06-16T02:30:21.7511547Z hint:
+2026-06-16T02:30:21.7511981Z hint: 	git branch -m <name>
+2026-06-16T02:30:21.7512466Z hint:
+2026-06-16T02:30:21.7513166Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-06-16T02:30:21.7514228Z Initialized empty Git repository in /home/runner/work/quantum-daily/quantum-daily/.git/
+2026-06-16T02:30:21.7520940Z [command]/usr/bin/git remote add origin https://github.com/ttyomi12/quantum-daily
+2026-06-16T02:30:21.7563128Z ##[endgroup]
+2026-06-16T02:30:21.7564001Z ##[group]Disabling automatic garbage collection
+2026-06-16T02:30:21.7567280Z [command]/usr/bin/git config --local gc.auto 0
+2026-06-16T02:30:21.7594319Z ##[endgroup]
+2026-06-16T02:30:21.7595056Z ##[group]Setting up auth
+2026-06-16T02:30:21.7600958Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-06-16T02:30:21.7633321Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-06-16T02:30:21.7988082Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-06-16T02:30:21.8018012Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-06-16T02:30:21.8231536Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-06-16T02:30:21.8262499Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-06-16T02:30:21.8480014Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-06-16T02:30:21.8513767Z ##[endgroup]
+2026-06-16T02:30:21.8521578Z ##[group]Fetching the repository
+2026-06-16T02:30:21.8523010Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +10593dc52228c31c8a37af762207394fe2e48949:refs/remotes/origin/main
+2026-06-16T02:30:22.1855431Z From https://github.com/ttyomi12/quantum-daily
+2026-06-16T02:30:22.1856465Z  * [new ref]         10593dc52228c31c8a37af762207394fe2e48949 -> origin/main
+2026-06-16T02:30:22.1898269Z ##[endgroup]
+2026-06-16T02:30:22.1899462Z ##[group]Determining the checkout info
+2026-06-16T02:30:22.1900790Z ##[endgroup]
+2026-06-16T02:30:22.1905574Z [command]/usr/bin/git sparse-checkout disable
+2026-06-16T02:30:22.1949234Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-06-16T02:30:22.1974617Z ##[group]Checking out the ref
+2026-06-16T02:30:22.1977978Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-06-16T02:30:22.2065907Z Switched to a new branch 'main'
+2026-06-16T02:30:22.2068489Z branch 'main' set up to track 'origin/main'.
+2026-06-16T02:30:22.2075410Z ##[endgroup]
+2026-06-16T02:30:22.2111876Z [command]/usr/bin/git log -1 --format=%H
+2026-06-16T02:30:22.2133262Z 10593dc52228c31c8a37af762207394fe2e48949
+2026-06-16T02:30:22.2388803Z ##[group]Run actions/setup-node@v4
+2026-06-16T02:30:22.2389392Z with:
+2026-06-16T02:30:22.2389816Z   node-version: 20
+2026-06-16T02:30:22.2390262Z   always-auth: false
+2026-06-16T02:30:22.2390715Z   check-latest: false
+2026-06-16T02:30:22.2395162Z   token: ***
+2026-06-16T02:30:22.2395608Z ##[endgroup]
+2026-06-16T02:30:22.4193657Z Attempting to download 20...
+2026-06-16T02:30:23.0014574Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+2026-06-16T02:30:23.6906920Z Extracting ...
+2026-06-16T02:30:23.7011424Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/e2669c51-d9ce-418b-a7ee-06b3532df43e -f /home/runner/work/_temp/ba6ffee6-1de1-477e-af59-e556cb21c191
+2026-06-16T02:30:24.7199643Z Adding to the cache ...
+2026-06-16T02:30:26.4794297Z ##[group]Environment details
+2026-06-16T02:30:26.6962277Z node: v20.20.2
+2026-06-16T02:30:26.6963017Z npm: 10.8.2
+2026-06-16T02:30:26.6964219Z yarn: 1.22.22
+2026-06-16T02:30:26.7037720Z ##[endgroup]
+2026-06-16T02:30:26.7157508Z ##[group]Run node scripts/run4.js
+2026-06-16T02:30:26.7157908Z [36;1mnode scripts/run4.js[0m
+2026-06-16T02:30:26.7350440Z shell: /usr/bin/bash -e {0}
+2026-06-16T02:30:26.7350744Z env:
+2026-06-16T02:30:26.7350969Z   DEEPSEEK_API_KEY: 
+2026-06-16T02:30:26.7351477Z ##[endgroup]
+2026-06-16T02:30:26.7715420Z ═══════════════════════════════
+2026-06-16T02:30:26.7716279Z   量子日报 v4 · 严格核验版
+2026-06-16T02:30:26.7716919Z   科大国盾量子技术股份有限公司
+2026-06-16T02:30:26.7717607Z ═══════════════════════════════
+2026-06-16T02:30:26.7717959Z 
+2026-06-16T02:30:26.7719668Z 🔍 从可访问源搜索量子科技新闻...
+2026-06-16T02:30:26.7719876Z 
+2026-06-16T02:30:26.7720048Z   [产业] The Quantum Insider...
+2026-06-16T02:30:26.9714660Z     ⚠ 无响应
+2026-06-16T02:30:26.9715024Z 
+2026-06-16T02:30:27.4718304Z   [产业] The Quantum Insider...
+2026-06-16T02:30:27.5600967Z     ✅ RSS: +10/10
+2026-06-16T02:30:27.5601767Z 
+2026-06-16T02:30:28.1602259Z   [产业] 量子科技产业资讯...
+2026-06-16T02:30:30.1278014Z     ✅ WEB: +64条
+2026-06-16T02:30:30.1278348Z 
+2026-06-16T02:30:30.7287327Z   [科研] Bing News...
+2026-06-16T02:30:30.8918645Z     ✅ RSS: +0/0
+2026-06-16T02:30:30.8918906Z 
+2026-06-16T02:30:31.4919576Z   [产业] Bing News...
+2026-06-16T02:30:31.7739369Z     ✅ RSS: +0/0
+2026-06-16T02:30:31.7739859Z 
+2026-06-16T02:30:32.3744765Z   [政策] Bing News...
+2026-06-16T02:30:32.5692800Z     ✅ RSS: +0/0
+2026-06-16T02:30:32.5693156Z 
+2026-06-16T02:30:33.1705983Z   [科研] Bing News...
+2026-06-16T02:30:33.3220498Z     ✅ RSS: +0/0
+2026-06-16T02:30:33.3220742Z 
+2026-06-16T02:30:33.9229872Z   [产业] Bing News...
+2026-06-16T02:30:34.1206833Z     ✅ RSS: +0/0
+2026-06-16T02:30:34.1207192Z 
+2026-06-16T02:30:34.7215663Z 📊 共搜集 74 条
+2026-06-16T02:30:34.7216022Z 
+2026-06-16T02:30:34.7218687Z 🔬 AI 严格核验与撰写摘要...
+2026-06-16T02:30:34.7219041Z 
+2026-06-16T02:30:34.7219305Z   批次 1/5 (15条)...
+2026-06-16T02:32:17.3100807Z     ✅ 10条通过核验
+2026-06-16T02:32:17.3103501Z 
+2026-06-16T02:32:19.3114859Z   批次 2/5 (15条)...
+2026-06-16T02:33:16.2864524Z     ✅ 10条通过核验
+2026-06-16T02:33:16.2864762Z 
+2026-06-16T02:33:18.2889252Z   批次 3/5 (15条)...
+2026-06-16T02:35:10.4263493Z     ✅ 10条通过核验
+2026-06-16T02:35:10.4263857Z 
+2026-06-16T02:35:12.4286925Z   批次 4/5 (15条)...
+2026-06-16T02:36:17.1519584Z     ✅ 10条通过核验
+2026-06-16T02:36:17.1519774Z 
+2026-06-16T02:36:19.1521445Z   批次 5/5 (14条)...
+2026-06-16T02:37:25.5674172Z     ✅ 5条通过核验
+2026-06-16T02:37:25.5676726Z 
+2026-06-16T02:37:25.5677050Z 📊 严格核验后共 45 条
+2026-06-16T02:37:25.5677286Z 
+2026-06-16T02:37:25.5677640Z 📝 生成HTML(舆情监控格式)...
+2026-06-16T02:37:25.5717059Z 
+2026-06-16T02:37:25.5717704Z ═══════════════════════════════
+2026-06-16T02:37:25.5718480Z   ✅ 日报完成 · 全部已核验
+2026-06-16T02:37:25.5719061Z   📊 共 45 条 | 政策:3 产业:18 科研:24 T0:3
+2026-06-16T02:37:25.5719886Z   📁 /home/runner/work/quantum-daily/quantum-daily/output/index.html
+2026-06-16T02:37:25.5720885Z ═══════════════════════════════
+2026-06-16T02:37:25.5780471Z ##[group]Run git config user.name "量子日报机器人"
+2026-06-16T02:37:25.5780851Z [36;1mgit config user.name "量子日报机器人"[0m
+2026-06-16T02:37:25.5781577Z [36;1mgit config user.email "bot@quantumctek.com"[0m
+2026-06-16T02:37:25.5781909Z [36;1mgit add output/ || true[0m
+2026-06-16T02:37:25.5782275Z [36;1mif git diff --cached --quiet 2>/dev/null; then echo "无变更"; else[0m
+2026-06-16T02:37:25.5782659Z [36;1m  TODAY=$(date +%Y-%m-%d)[0m
+2026-06-16T02:37:25.5783280Z [36;1m  TOT=$(cat output/summary.json 2>/dev/null | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('total','?'))" 2>/dev/null || echo "?")[0m
+2026-06-16T02:37:25.5784203Z [36;1m  git commit -m "📰 ${TODAY} · ${TOT}条快讯"[0m
+2026-06-16T02:37:25.5784496Z [36;1m  git push[0m
+2026-06-16T02:37:25.5784695Z [36;1mfi[0m
+2026-06-16T02:37:25.5817575Z shell: /usr/bin/bash -e {0}
+2026-06-16T02:37:25.5817830Z ##[endgroup]
+2026-06-16T02:37:25.7237189Z [main 797aaa3] 📰 2026-06-16 · ?条快讯
+2026-06-16T02:37:25.7237785Z  2 files changed, 1894 insertions(+), 1062 deletions(-)
+2026-06-16T02:37:26.6168274Z To https://github.com/ttyomi12/quantum-daily
+2026-06-16T02:37:26.6169001Z    10593dc..797aaa3  main -> main
+2026-06-16T02:37:26.6257609Z ##[group]Run git remote add gitee ***gitee.com/tramses/quantum-daily.git 2>/dev/null || true
+2026-06-16T02:37:26.6258509Z [36;1mgit remote add gitee ***gitee.com/tramses/quantum-daily.git 2>/dev/null || true[0m
+2026-06-16T02:37:26.6258957Z [36;1mgit push gitee main --force[0m
+2026-06-16T02:37:26.6259260Z [36;1mecho "✅ Gitee已同步"[0m
+2026-06-16T02:37:26.6292928Z shell: /usr/bin/bash -e {0}
+2026-06-16T02:37:26.6293219Z ##[endgroup]
+2026-06-16T02:37:41.7982654Z remote: Powered by [01;33mGITEE.COM [0m[1.1.23]        
+2026-06-16T02:37:41.7983238Z remote: Set trace flag 914b8fb5        
+2026-06-16T02:37:41.7987682Z To https://gitee.com/tramses/quantum-daily.git
+2026-06-16T02:37:41.7988509Z  ! [remote rejected] main -> main (shallow update not allowed)
+2026-06-16T02:37:41.7989505Z error: failed to push some refs to 'https://gitee.com/tramses/quantum-daily.git'
+2026-06-16T02:37:41.8017243Z ##[error]Process completed with exit code 1.
+2026-06-16T02:37:41.8149725Z Post job cleanup.
+2026-06-16T02:37:41.9139697Z [command]/usr/bin/git version
+2026-06-16T02:37:41.9175775Z git version 2.54.0
+2026-06-16T02:37:41.9219141Z Temporarily overriding HOME='/home/runner/work/_temp/3aaaacd2-826f-4e55-94d9-f400dbd11884' before making global git config changes
+2026-06-16T02:37:41.9220633Z Adding repository directory to the temporary git global config as a safe directory
+2026-06-16T02:37:41.9224731Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/quantum-daily/quantum-daily
+2026-06-16T02:37:41.9258747Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-06-16T02:37:41.9291420Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-06-16T02:37:41.9512395Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-06-16T02:37:41.9535939Z http.https://github.com/.extraheader
+2026-06-16T02:37:41.9547838Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-06-16T02:37:41.9579465Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-06-16T02:37:41.9796155Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-06-16T02:37:41.9827752Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-06-16T02:37:42.0190218Z Cleaning up orphan processes
+2026-06-16T02:37:42.0456461Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-node@v4. Actions will be forced to run with Node.js 24 by default starting June 16th, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

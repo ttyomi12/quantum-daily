@@ -1,0 +1,9 @@
+﻿2026-06-16T02:06:54.2637929Z ##[group]Run git remote add gitee ***gitee.com/TRamses/quantum-daily.git 2>/dev/null || true
+2026-06-16T02:06:54.2638827Z [36;1mgit remote add gitee ***gitee.com/TRamses/quantum-daily.git 2>/dev/null || true[0m
+2026-06-16T02:06:54.2639282Z [36;1mgit push gitee main --force[0m
+2026-06-16T02:06:54.2639583Z [36;1mecho "✅ Gitee已同步"[0m
+2026-06-16T02:06:54.2673744Z shell: /usr/bin/bash -e {0}
+2026-06-16T02:06:54.2674122Z ##[endgroup]
+2026-06-16T02:06:57.5012328Z remote: [31m[session-fd4c9882] The token username invalid[0m
+2026-06-16T02:06:57.5013185Z fatal: unable to access 'https://gitee.com/TRamses/quantum-daily.git/': The requested URL returned error: 403
+2026-06-16T02:06:57.5045557Z ##[error]Process completed with exit code 128.

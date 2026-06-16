@@ -1,0 +1,12 @@
+﻿2026-06-16T02:37:26.6257600Z ##[group]Run git remote add gitee ***gitee.com/tramses/quantum-daily.git 2>/dev/null || true
+2026-06-16T02:37:26.6258505Z [36;1mgit remote add gitee ***gitee.com/tramses/quantum-daily.git 2>/dev/null || true[0m
+2026-06-16T02:37:26.6258954Z [36;1mgit push gitee main --force[0m
+2026-06-16T02:37:26.6259257Z [36;1mecho "✅ Gitee已同步"[0m
+2026-06-16T02:37:26.6292922Z shell: /usr/bin/bash -e {0}
+2026-06-16T02:37:26.6293216Z ##[endgroup]
+2026-06-16T02:37:41.7982620Z remote: Powered by [01;33mGITEE.COM [0m[1.1.23]        
+2026-06-16T02:37:41.7983235Z remote: Set trace flag 914b8fb5        
+2026-06-16T02:37:41.7987667Z To https://gitee.com/tramses/quantum-daily.git
+2026-06-16T02:37:41.7988505Z  ! [remote rejected] main -> main (shallow update not allowed)
+2026-06-16T02:37:41.7989500Z error: failed to push some refs to 'https://gitee.com/tramses/quantum-daily.git'
+2026-06-16T02:37:41.8017231Z ##[error]Process completed with exit code 1.

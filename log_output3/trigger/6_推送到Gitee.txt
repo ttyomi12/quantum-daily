@@ -1,0 +1,9 @@
+﻿2026-06-16T01:29:15.4644577Z ##[group]Run git remote add gitee ***gitee.com/TRamses/quantum-daily.git 2>/dev/null || true
+2026-06-16T01:29:15.4645389Z [36;1mgit remote add gitee ***gitee.com/TRamses/quantum-daily.git 2>/dev/null || true[0m
+2026-06-16T01:29:15.4645835Z [36;1mgit push gitee main --force[0m
+2026-06-16T01:29:15.4646156Z [36;1mecho "✅ Gitee已同步"[0m
+2026-06-16T01:29:15.4678098Z shell: /usr/bin/bash -e {0}
+2026-06-16T01:29:15.4678352Z ##[endgroup]
+2026-06-16T01:29:17.4725786Z remote: [31m[session-a0433f99] TRamses: Incorrect username or password (access token)[0m
+2026-06-16T01:29:17.4726816Z fatal: Authentication failed for 'https://gitee.com/TRamses/quantum-daily.git/'
+2026-06-16T01:29:17.4758866Z ##[error]Process completed with exit code 128.

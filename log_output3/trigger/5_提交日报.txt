@@ -1,0 +1,17 @@
+﻿2026-06-16T01:29:14.2838541Z ##[group]Run git config user.name "量子日报机器人"
+2026-06-16T01:29:14.2838930Z [36;1mgit config user.name "量子日报机器人"[0m
+2026-06-16T01:29:14.2839270Z [36;1mgit config user.email "bot@quantumctek.com"[0m
+2026-06-16T01:29:14.2839588Z [36;1mgit add output/ || true[0m
+2026-06-16T01:29:14.2839934Z [36;1mif git diff --cached --quiet 2>/dev/null; then echo "无变更"; else[0m
+2026-06-16T01:29:14.2840297Z [36;1m  TODAY=$(date +%Y-%m-%d)[0m
+2026-06-16T01:29:14.2840917Z [36;1m  TOT=$(cat output/summary.json 2>/dev/null | python3 -c "import sys,json;d=json.load(sys.stdin);print(d.get('total','?'))" 2>/dev/null || echo "?")[0m
+2026-06-16T01:29:14.2841843Z [36;1m  git commit -m "📰 ${TODAY} · ${TOT}条快讯"[0m
+2026-06-16T01:29:14.2842130Z [36;1m  git push[0m
+2026-06-16T01:29:14.2842325Z [36;1mfi[0m
+2026-06-16T01:29:14.2875363Z shell: /usr/bin/bash -e {0}
+2026-06-16T01:29:14.2875622Z ##[endgroup]
+2026-06-16T01:29:14.4250361Z [main e4ffad4] 📰 2026-06-16 · ?条快讯
+2026-06-16T01:29:14.4250913Z  2 files changed, 3539 insertions(+), 1004 deletions(-)
+2026-06-16T01:29:14.4251588Z  create mode 100644 "output/archive/\351\207\217\345\255\220\346\227\245\346\212\245-2026-06-16.html"
+2026-06-16T01:29:15.4548953Z To https://github.com/ttyomi12/quantum-daily
+2026-06-16T01:29:15.4549773Z    d0cfa1b..e4ffad4  main -> main
