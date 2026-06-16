@@ -31,6 +31,7 @@ jobs:
       - name: 推送到Gitee
         run: |
           git remote add gitee https://tramses:${{ secrets.GITEE_TOKEN }}@gitee.com/tramses/quantum-daily.git 2>/dev/null || true
+          git fetch --unshallow origin 2>/dev/null || true
           git push gitee main --force
           echo "✅ Gitee已同步"
       - name: 触发Pages更新
