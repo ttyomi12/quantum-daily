@@ -30,11 +30,11 @@ jobs:
           fi
       - name: 推送到Gitee
         run: |
-          git remote add gitee https://TRamses:${{ secrets.GITEE_TOKEN }}@gitee.com/TRamses/quantum-daily.git 2>/dev/null || true
+          git remote add gitee https://tramses:${{ secrets.GITEE_TOKEN }}@gitee.com/tramses/quantum-daily.git 2>/dev/null || true
           git push gitee main --force
           echo "✅ Gitee已同步"
       - name: 触发Pages更新
         run: |
-          curl -s -X POST "https://gitee.com/api/v5/repos/TRamses/quantum-daily/pages/builds" -H "Content-Type: application/json" -d "{\"access_token\":\"${{ secrets.GITEE_TOKEN }}\"}"
+          curl -s -X POST "https://gitee.com/api/v5/repos/tramses/quantum-daily/pages/builds" -H "Content-Type: application/json" -d "{\"access_token\":\"${{ secrets.GITEE_TOKEN }}\"}"
           echo ""
-          echo "🌐 https://TRamses.gitee.io/quantum-daily/"
+          echo "🌐 https://tramses.gitee.io/quantum-daily/"
