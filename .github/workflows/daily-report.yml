@@ -140,11 +140,13 @@ async function main(){
 }
 main().catch(e=>{console.error(e);process.exit(1)});
 "
+      - name: 复制到根目录(供GitHub Pages)
+        run: cp output/index.html index.html
       - name: 提交
         run: |
           git config user.name "量子视界"
           git config user.email "bot@quantum-daily.dev"
-          git add output/ || true
+          git add output/ index.html || true
           if git diff --cached --quiet; then echo "无变更"; else
             TODAY=$(date +%Y-%m-%d)
             TOT=$(node -e "try{console.log(require('./output/summary.json').total)}catch(e){console.log('?')}")
