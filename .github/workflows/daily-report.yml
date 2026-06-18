@@ -15,139 +15,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
+
       - name: 生成日报
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        run: node -e "
-const {writeFileSync,mkdirSync,existsSync,readFileSync}=require('fs');
-const https=require('https'),http=require('http');
-const API_KEY=process.env.DEEPSEEK_API_KEY||'';
+        run: node scripts/auto_daily.js
 
-const T0=['IonQ','Rigetti','IBM','Google','Microsoft','NVIDIA','IQM','本源量子','国仪量子','玻色量子','九州量子','中创为量子','问天量子','图灵量子','中国移动','中国联通','中国电信','SK Telecom'];
-const FEEDS=[
-  {url:'https://thequantuminsider.com/feed/', name:'The Quantum Insider', max:15},
-  {url:'https://www.insidequantumtechnology.com/feed/', name:'Inside Quantum Technology', max:10},
-];
-
-const S=ms=>new Promise(r=>setTimeout(r,ms));
-function G(u){return new Promise(R=>{const p=u.startsWith('https')?https:http;
-  p.get(u,{timeout:15000,headers:{'User-Agent':'Mozilla/5.0'}},res=>{
-  if([301,302,303,307,308].includes(res.statusCode)&&res.headers.location){
-    try{return G(new URL(res.headers.location,u).href).then(R);}catch{R('');}return;}
-  if(res.statusCode!==200){R('');return}
-  let d='';res.on('data',c=>d+=c);res.on('end',()=>R(d));res.on('error',()=>R(''));
-}).on('error',()=>R(''));}).on('timeout',()=>{R('')})}
-
-function X(x,t){const m=x.match(new RegExp('<'+t+'[^>]*>(?:<!\\\\\\\\[CDATA\\\\\\\\[)?([\\\\\\\\s\\\\\\\\S]*?)(?:\\\\\\\\]\\\\\\\\]>)?</'+t+'>','is'));return m?m[1].trim():''}
-function clean(s){return s.replace(/<[^>]*>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'\"').replace(/&#39;/g,\"'\").replace(/&nbsp;/g,' ').replace(/\\s+/g,' ').trim()}
-function E(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;'):''}
-
-async function AI(msgs,tk=8192){
-  const body=JSON.stringify({model:'deepseek-v4-pro',max_tokens:tk,messages:msgs,temperature:0.3});
-  return new Promise((R,J)=>{
-    const r=https.request({hostname:'api.deepseek.com',path:'/anthropic/v1/messages',method:'POST',timeout:120000,
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01'}},
-      res=>{let d='';res.on('data',c=>d+=c);res.on('end',()=>{
-        try{const j=JSON.parse(d);if(j.error){J(new Error(j.error.message));return}R((j.content||[]).map(c=>c.text||'').join(''));}catch(e){J(new Error('parse'))}});res.on('error',J)});
-    r.on('error',J);r.on('timeout',()=>{r.destroy();J(new Error('timeout'))});r.write(body);r.end()})
-}
-
-// ========== 阶段一：RSS 发现 ==========
-async function discover(){
-  console.log('📡 抓取RSS...');
-  const all=[],seen=new Set();
-  for(const f of FEEDS){
-    const xml=await G(f.url);
-    if(!xml){console.log('  '+f.name+': 无响应');continue}
-    const re=/<item>([\\s\\S]*?)<\\/item>/gi;let m,added=0;
-    while((m=re.exec(xml))!==null){
-      const t=clean(X(m[1],'title')),l=clean(X(m[1],'link'));
-      const desc=clean(X(m[1],'description')).substring(0,300);
-      const pubDate=X(m[1],'pubDate');
-      if(t&&l&&!seen.has(l)&&added<f.max){seen.add(l);added++;all.push({title:t,link:l,desc,pubDate,feed:f.name})}
-    }
-    console.log('  '+f.name+': +'+added);
-  }
-  console.log('📊 共'+all.length+'条\\n');
-  return all;
-}
-
-// ========== 阶段二：AI 筛选+摘要 ==========
-async function process(items){
-  console.log('🤖 AI处理...');
-  const B=15,bs=[];for(let i=0;i<items.length;i+=B)bs.push(items.slice(i,i+B));
-  const all=[];
-  for(let bi=0;bi<bs.length;bi++){
-    const batch=bs[bi];
-    console.log('  批次'+(bi+1)+'/'+bs.length+'('+batch.length+'条)');
-    const txt=batch.map((it,i)=>'['+(i+1)+'] '+it.title+'\\n  RSS链接:'+it.link+'\\n  来源:'+it.feed+'\\n  日期:'+(it.pubDate||'未知')).join('\\n\\n');
-    const sys='你是量子科技产业分析助手。\\n\\n## 任务\\n1. 筛选与量子科技(量子计算/量子通信QKD/量子测量/PQC/量子传感)相关的新闻\\n2. 排除转载、广告、不相关、标题党\\n3. 撰写150字中文客观摘要(5W1H要素)\\n4. ⚠️ 每条summary开头必须写具体日期(如\"6月17日\")\\n5. sourceUrl必须填RSS提供的真实链接,禁止编造URL!\\n6. sourceName如实填写RSS来源或报道媒体\\n\\n## T0友商\\n'+T0.join('、')+'\\n\\n输出JSON(每批最多10条):\\n{\"items\":[{\"category\":\"政策|产业|科研\",\"title\":\"≤20字中文标题\",\"summary\":\"月日·150字中文摘要\",\"sourceType\":\"media|corporate|government|journal\",\"sourceName\":\"来源名称(如实填写)\",\"sourceUrl\":\"RSS真实链接\",\"traceConfidence\":\"medium\",\"involvesT0\":true/false,\"involvesCompetitor\":\"友商名(逗号分隔)\",\"isBreakthrough\":true/false}]}\\n只输出JSON';
-    try{
-      const r=await AI([{role:'system',content:sys},{role:'user',content:'处理新闻('+batch.length+'条):\\n\\n'+txt}]);
-      const jm=r.match(/\\{[\\s\\S]*\"items\"[\\s\\S]*\\}/);
-      if(jm){const p=JSON.parse(jm[0]);if(p.items){all.push(...p.items);console.log('    ✅ '+p.items.length+'条')}}
-      else{console.log('    ⚠ 无法解析')}
-    }catch(e){console.log('    ❌ '+e.message)}
-    if(bi<bs.length-1)await S(2000);
-  }
-  const s=new Set();const deduped=all.filter(i=>{const k=i.title;if(s.has(k))return false;s.add(k);return true});
-  console.log('📊 AI处理后'+deduped.length+'条\\n');
-  return deduped;
-}
-
-// ========== 阶段三：生成 HTML(简化内联模板) ==========
-function build(items){
-  const now=new Date();
-  const ds=now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
-  const ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  const pol=items.filter(i=>i.category==='政策'),ind=items.filter(i=>i.category==='产业'),res=items.filter(i=>i.category==='科研');
-  const t0=items.filter(i=>i.involvesT0),br=items.filter(i=>i.isBreakthrough);
-
-  const si={corporate:'🏢',government:'🏛️',journal:'📄',media:'📰'};
-  function tb(i){
-    if(i.traceConfidence==='high')return '<span style=\"color:#0e6;font-size:10px\">✅一手</span>';
-    if(i.traceConfidence==='medium')return '<span style=\"color:#f90;font-size:10px\">📰媒体</span>';
-    return '<span style=\"color:#f60;font-size:10px\">⚠️待核实</span>';
-  }
-  function card(i){
-    const cc={'政策':'tag-p','产业':'tag-i','科研':'tag-r'}[i.category]||'tag-r';
-    const ct=i.involvesCompetitor?'<span style=\"background:rgba(255,145,0,.15);color:#f90;font-size:10px;padding:2px 6px;border-radius:10px\">'+E(i.involvesCompetitor)+'</span>':'';
-    const brs=i.isBreakthrough?'<span style=\"background:rgba(255,61,90,.15);color:#f33;font-size:10px;padding:2px 6px;border-radius:10px\">⚡突破</span>':'';
-    return '<div style=\"background:#161c2a;border:1px solid #1e2a3a;border-radius:14px;padding:18px 22px;margin-bottom:10px\"><div style=\"display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap\"><span class=\"'+cc+'\" style=\"font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3)\">'+i.category+'</span>'+ct+brs+tb(i)+'</div><div style=\"font-size:15px;font-weight:700;color:#e2e8f0;margin-bottom:6px\">'+E(i.title)+'</div><div style=\"font-size:13px;color:#8892a8;margin-bottom:8px;line-height:1.6\">'+E(i.summary)+'</div><div style=\"font-size:12px;color:#5a6478;display:flex;gap:12px\"><span>'+(si[i.sourceType]||'📡')+' '+E(i.sourceName||'')+'</span><a href=\"'+E(i.sourceUrl||'#')+'\" target=\"_blank\" style=\"color:#00d4ff\">查看原文 ↗</a></div></div>';
-  }
-  const srcs={};items.forEach(i=>{srcs[i.sourceName]=(srcs[i.sourceName]||0)+1});
-  const sst=Object.entries(srcs).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>n+'('+c+')').join('、');
-  return '<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"><title>量子视界 | '+ds+'</title><style>:root{--bg:#0a0e17;--s:#111827;--c:#161c2a;--b:#1e2a3a;--t:#e2e8f0;--t2:#8892a8;--t3:#5a6478}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,PingFang SC,Microsoft YaHei,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,212,255,.06),transparent)}.hd{background:rgba(17,24,39,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--b);padding:0 28px;height:66px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99}.hd h1{font-size:17px;font-weight:700;background:linear-gradient(135deg,#e2e8f0,#a0b4d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hd-date{font-size:13px;color:var(--t2)}.ct{max-width:1200px;margin:0 auto;padding:20px 24px}.sr{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}.sc{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden}.sc .l{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px}.sc .v{font-size:28px;font-weight:800;margin-top:4px}.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}.tab-btn{padding:10px 24px;border-radius:8px;border:1px solid var(--b);background:var(--s);color:var(--t2);cursor:pointer;font-size:13px;font-weight:600;border:none}.tab-btn.active{background:#3b82f6;color:#fff}.tab-panel{display:none}.tab-panel.active{display:block}.ft{border-top:1px solid var(--b);margin-top:32px;padding:20px 24px;text-align:center}.ft p{font-size:12px;color:var(--t3);line-height:1.8}@media(max-width:768px){.sr{grid-template-columns:repeat(2,1fr)}.hd{padding:0 14px}.ct{padding:12px 10px}}</style></head><body><header class=\"hd\"><div><h1>量子视界 · 全球量子科技日报</h1></div><div class=\"hd-date\">📅 '+ds+'</div></header><div class=\"ct\"><div class=\"sr\"><div class=\"sc\"><div class=\"l\">总快讯</div><div class=\"v\">'+items.length+'</div></div><div class=\"sc\"><div class=\"l\">📋 政策</div><div class=\"v\">'+pol.length+'</div></div><div class=\"sc\"><div class=\"l\">🏭 产业</div><div class=\"v\">'+ind.length+'</div></div><div class=\"sc\"><div class=\"l\">🔬 科研</div><div class=\"v\">'+res.length+'</div></div><div class=\"sc\"><div class=\"l\">🎯 T0</div><div class=\"v\">'+t0.length+'</div></div></div><div class=\"tabs\"><button class=\"tab-btn active\" onclick=\"switchTab('all')\">全部('+items.length+')</button><button class=\"tab-btn\" onclick=\"switchTab('policy')\">政策('+pol.length+')</button><button class=\"tab-btn\" onclick=\"switchTab('industry')\">产业('+ind.length+')</button><button class=\"tab-btn\" onclick=\"switchTab('research')\">科研('+res.length+')</button></div><div id=\"tab-all\" class=\"tab-panel active\">'+items.map(card).join('')+'</div><div id=\"tab-policy\" class=\"tab-panel\">'+(pol.length?pol.map(card).join(''):'<div style=\"text-align:center;padding:40px;color:var(--t3)\">今日暂无政策类新闻</div>')+'</div><div id=\"tab-industry\" class=\"tab-panel\">'+(ind.length?ind.map(card).join(''):'<div style=\"text-align:center;padding:40px;color:var(--t3)\">今日暂无产业类新闻</div>')+'</div><div id=\"tab-research\" class=\"tab-panel\">'+(res.length?res.map(card).join(''):'<div style=\"text-align:center;padding:40px;color:var(--t3)\">今日暂无科研类新闻</div>')+'</div></div><footer class=\"ft\"><p>© '+now.getFullYear()+' 量子视界 · AI自动生成 · 信源:'+sst+'<br>本报告信息来源于公开RSS，仅供参考</p></footer><script>function switchTab(n){document.querySelectorAll(\".tab-panel\").forEach(p=>p.classList.remove(\"active\"));document.querySelectorAll(\".tab-btn\").forEach(b=>b.classList.remove(\"active\"));document.getElementById(\"tab-\"+n).classList.add(\"active\");event.target.classList.add(\"active\")}</script></body></html>';
-}
-
-// ========== 主流程 ==========
-async function main(){
-  console.log('══ 量子视界 · 自动日报 ══');
-  if(!API_KEY){console.error('❌ 未设置API_KEY');process.exit(1)}
-  const raw=await discover();
-  if(!raw.length){console.log('⚠ 无新闻');process.exit(0)}
-  const proc=await process(raw);
-  if(!proc.length){console.log('⚠ AI处理为空');process.exit(0)}
-  const html=build(proc);
-  if(!existsSync('output'))mkdirSync('output',{recursive:true});
-  writeFileSync('output/index.html',html,'utf-8');
-  const df=new Date().toISOString().substring(0,10);
-  if(!existsSync('output/archive'))mkdirSync('output/archive',{recursive:true});
-  writeFileSync('output/archive/量子日报-'+df+'.html',html,'utf-8');
-  const sum={date:df,total:proc.length,policy:proc.filter(i=>i.category==='政策').length,industry:proc.filter(i=>i.category==='产业').length,research:proc.filter(i=>i.category==='科研').length,t0:proc.filter(i=>i.involvesT0).length,bt:proc.filter(i=>i.isBreakthrough).length};
-  writeFileSync('output/summary.json',JSON.stringify(sum));
-  console.log('✅ 完成! '+proc.length+'条 | 政策:'+sum.policy+' 产业:'+sum.industry+' 科研:'+sum.research);
-}
-main().catch(e=>{console.error(e);process.exit(1)});
-"
-      - name: 复制到根目录(供GitHub Pages)
+      - name: 复制到根目录
         run: cp output/index.html index.html
+
       - name: 提交
         run: |
           git config user.name "量子视界"
           git config user.email "bot@quantum-daily.dev"
           git add output/ index.html || true
-          if git diff --cached --quiet; then echo "无变更"; else
+          if git diff --cached --quiet; then
+            echo "无变更"
+          else
             TODAY=$(date +%Y-%m-%d)
             TOT=$(node -e "try{console.log(require('./output/summary.json').total)}catch(e){console.log('?')}")
             git commit -m "📰 ${TODAY} · ${TOT}条"
